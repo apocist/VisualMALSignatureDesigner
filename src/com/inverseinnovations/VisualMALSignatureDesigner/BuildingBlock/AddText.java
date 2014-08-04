@@ -165,7 +165,7 @@ public class AddText extends BuildingBlock {
 	protected JDialog settingsTextFont(JDialog owner){
 		final JDialog d = new JDialog(owner, "Font Settings", true);
 		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "/fonts");
-		FileFilter filter = new FileNameExtensionFilter("TrueType font", new String[] {"ttf", "jpeg"});
+		FileFilter filter = new FileNameExtensionFilter("TrueType font", new String[] {"ttf"});
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
 
@@ -235,7 +235,7 @@ public class AddText extends BuildingBlock {
 		//Size Style
 		JLabel sizeLab = new JLabel("Size:");JLabel styleLab = new JLabel("Style:");
 		final JSpinner sizeSpinner = new JSpinner();
-		sizeSpinner.setModel(new SpinnerNumberModel(8,1,999,1));if(getTextFont() != null){sizeSpinner.setValue(getTextFont().getSize());}
+		sizeSpinner.setModel(new SpinnerNumberModel(12,1,999,1));if(getTextFont() != null){sizeSpinner.setValue(getTextFont().getSize());}
 		String[] styleStrings = { "Plain", "Bold", "Italic"};
 		final JComboBox<String> styleBox = new JComboBox<String>(styleStrings);
 		styleBox.setSelectedIndex(0);
@@ -598,7 +598,7 @@ public class AddText extends BuildingBlock {
 			if(getChildCount() > 0){
 				//send this to each child to rerender(filter)
 				for(int i = 0; i< getChildCount(); i++){
-					if(!((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).ISFILTER){
+					if(!(((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()) instanceof com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.Filter.Filter)){
 						image = Main.sig.filter.composite(image, ((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).display(image), 0, 0);
 					}
 					else{//if filter
@@ -612,7 +612,7 @@ public class AddText extends BuildingBlock {
 		JOptionPane.showMessageDialog(null, "ERROR: No Font was choosen!");
 		return null;
 	}
-	public BufferedImage generateImage(){
+	protected BufferedImage generateImage(){
 		return Main.sig.makeText(getText(),  getX(), getY(), getTextFont(), getAlign(), getAngdeg());
 	}
 }

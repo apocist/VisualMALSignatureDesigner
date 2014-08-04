@@ -1,6 +1,7 @@
 package com.inverseinnovations.VisualMALSignatureDesigner;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -61,6 +62,10 @@ public class ImageWindow {
 		catch(java.lang.NullPointerException e){
 			System.out.println("Signature is null");
 		}
-		System.out.println("image updated\n");//FIXME remove later
+		//System.out.println("image updated\n");//FIXME remove later
+	}
+
+	public Point getLocation(){
+		return imageFrame.getLocation();
 	}
 }

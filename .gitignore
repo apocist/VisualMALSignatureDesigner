@@ -1,5 +1,5 @@
-.bin/*
-.cache/thumbnails/*
+bin/*
+cache/thumbnails/*.jpg
 *.class
 
 # Windows image file caches

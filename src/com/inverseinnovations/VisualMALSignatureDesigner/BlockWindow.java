@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,10 +21,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.*;
+import com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.Filter.*;
 
 public class BlockWindow {
 	public final Main Main;
@@ -122,7 +125,9 @@ public class BlockWindow {
 
 				//blockFrame.getContentPane().add(imageLabel, BorderLayout.CENTER);
 				blockFrame.pack();
-				blockFrame.setLocationRelativeTo(null);
+				//blockFrame.setLocationRelativeTo(null);
+				Point loc = Main.ImageWindow.getLocation();
+				blockFrame.setLocation((int) loc.getX()-400, (int) loc.getY());
 				blockFrame.setVisible(true);
 
 			}
@@ -136,52 +141,45 @@ public class BlockWindow {
 	public JDialog createBlockSelectionDialog(){
 		final JDialog d = new JDialog(blockFrame, "Add Block", true);
 
-		//show selection panel
-		String[] types = {"Background","Text","Anime Title","Anime Status"};
-		final JList<String> list = new JList<String>(types); //data has type Object[]
-		list.setPrototypeCellValue(" Anime Status ");
-		list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		list.setVisibleRowCount(-1);
-		JScrollPane listScroller = new JScrollPane(list);
-		listScroller.setPreferredSize(new Dimension(250, 80));
-		listScroller.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+		String longestBlockName = " Anime Thumbnail ";
 
-		JPanel listPane = new JPanel();
-		listPane.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS));
-		listPane.add(Box.createRigidArea(new Dimension(0,5)));
-		listPane.add(listScroller);
-		listPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		//show block selection panel
+		String[] blockTypes = {"Background","Text","Image","Anime Thumbnail","Anime Title","Anime Status"};
+		final JList<String> blockList = new JList<String>(blockTypes); //data has type Object[]
+		blockList.setPrototypeCellValue(longestBlockName);
+		blockList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		blockList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		blockList.setVisibleRowCount(-1);
+		JScrollPane blockListScroller = new JScrollPane(blockList);
+		blockListScroller.setPreferredSize(new Dimension(250, 80));
+		blockListScroller.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
 
+		JPanel blockListPane = new JPanel();
+		blockListPane.setLayout(new BoxLayout(blockListPane, BoxLayout.PAGE_AXIS));
+		blockListPane.add(Box.createRigidArea(new Dimension(0,5)));
+		blockListPane.add(blockListScroller);
+		blockListPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+		//show filter selection panel
+		String[] filterTypes = {"Rotate"};
+		final JList<String> filterList = new JList<String>(filterTypes); //data has type Object[]
+		filterList.setPrototypeCellValue(longestBlockName);
+		filterList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		filterList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		filterList.setVisibleRowCount(-1);
+		JScrollPane filterListScroller = new JScrollPane(filterList);
+		filterListScroller.setPreferredSize(new Dimension(250, 80));
+		filterListScroller.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+
+		JPanel filterListPane = new JPanel();
+		filterListPane.setLayout(new BoxLayout(filterListPane, BoxLayout.PAGE_AXIS));
+		filterListPane.add(Box.createRigidArea(new Dimension(0,5)));
+		filterListPane.add(filterListScroller);
+		filterListPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+		//buttons
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if(list.getSelectedValue() != null){
-					BuildingBlock child = new BuildingBlock("Null", Main);
-					switch(list.getSelectedValue()){
-					case "Background":
-						d.dispose();
-						child = new AddBackground(Main);
-						break;
-					case "Text":
-						d.dispose();
-						child = new AddText(Main);
 
-						break;
-					case "Anime Title":
-						d.dispose();
-						child = new AddTitle(Main);
-						break;
-					case "Anime Status":
-						d.dispose();
-						child = new AddStatus(Main);
-						break;
-					}
-					blocks.addObject(child);
-					child.settingsDialog(blockFrame);
-				}
-			}
-		});
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -198,8 +196,56 @@ public class BlockWindow {
 		buttonPane.add(cancelButton);
 		buttonPane.add(Box.createHorizontalGlue());
 
+		//tabs
+		final JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab("Blocks", blockListPane);
+		tabbedPane.addTab("Filters", filterListPane);
+
+		okButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				JList<String> selectedList;
+				if(tabbedPane.getSelectedIndex() == 1){selectedList = filterList;}
+				else{selectedList = blockList;}
+				if(selectedList.getSelectedValue() != null){
+					BuildingBlock child = new BuildingBlock("Null", Main);
+					switch(selectedList.getSelectedValue()){
+					case "Background":
+						d.dispose();
+						child = new AddBackground(Main);
+						break;
+					case "Text":
+						d.dispose();
+						child = new AddText(Main);
+						break;
+					case "Image":
+						d.dispose();
+						child = new AddImage(Main);
+						break;
+					case "Anime Thumbnail":
+						d.dispose();
+						child = new AddThumbnail(Main);
+						break;
+					case "Anime Title":
+						d.dispose();
+						child = new AddTitle(Main);
+						break;
+					case "Anime Status":
+						d.dispose();
+						child = new AddStatus(Main);
+						break;
+					case "Rotate":
+						d.dispose();
+						child = new FilterRotate(Main);
+						break;
+					}
+					blocks.addObject(child);
+					child.settingsDialog(blockFrame);
+				}
+			}
+		});
+		//content
 		Container contentPane = d.getContentPane();
-		contentPane.add(listPane, BorderLayout.CENTER);
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.PAGE_END);
 
 		d.pack();

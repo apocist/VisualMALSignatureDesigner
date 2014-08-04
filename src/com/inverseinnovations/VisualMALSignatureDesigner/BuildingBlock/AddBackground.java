@@ -141,7 +141,7 @@ public class AddBackground extends BuildingBlock {
 		if(getChildCount() > 0){
 			//send this to each child to rerender(filter)
 			for(int i = 0; i< getChildCount(); i++){
-				if(!((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).ISFILTER){
+				if(!((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).isFilter()){
 					image = Main.sig.filter.composite(image, ((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).display(image), 0, 0);
 				}
 				else{//if filter

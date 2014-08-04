@@ -13,7 +13,6 @@ import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 public class BuildingBlock extends DefaultMutableTreeNode{
 	private static final long serialVersionUID = 1L;
 	public final boolean ISPARENTABLE = true;
-	public final boolean ISFILTER = false;
 	private BufferedImage image;
 	private String name;
 
@@ -25,6 +24,9 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 		//this.sig = sig;
 		this.Main = Main;
 		saveObject();
+	}
+	public boolean isFilter(){
+		return false;
 	}
 	/**
 	 * @return the image

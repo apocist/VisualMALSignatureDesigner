@@ -148,13 +148,12 @@ public class InitSignature extends BuildingBlock {
 	}
 	@Override
 	public BufferedImage display(BufferedImage image){
-		//render TODO
 		Main.sig.initDemoSignature(getWidth(),getHeight());
 		image = Main.sig.getSigImage();
 		if(getChildCount() > 0){
 			//send this to each child to rerender(filter)
 			for(int i = 0; i< getChildCount(); i++){
-				System.out.println(" - "+((DefaultMutableTreeNode) getChildAt(i)).getUserObject().getClass().getSimpleName());//XXX
+				//System.out.println(" - "+((DefaultMutableTreeNode) getChildAt(i)).getUserObject().getClass().getSimpleName());//XXX
 				BuildingBlock block = (BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject();
 				if(block != null){
 					image = block.display(image);//TODO
@@ -163,7 +162,6 @@ public class InitSignature extends BuildingBlock {
 				else{System.out.println("DANGER NULL BLOCK!");}
 			}
 		}
-		System.out.println("size in initSig "+Main.sig.getSigImage().getWidth());
 		//return final image
 		return Main.sig.getSigImage();
 	}
