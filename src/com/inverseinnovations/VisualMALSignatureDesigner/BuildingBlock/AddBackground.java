@@ -101,6 +101,7 @@ public class AddBackground extends BuildingBlock {
 				setRgb(Main.toHexString(cc.getColor()));
 				saveObject();
 				Main.ImageWindow.update();
+				Main.BlockWindow.blocks.reload();
 				d.dispose();
 			}
 		});
@@ -137,7 +138,6 @@ public class AddBackground extends BuildingBlock {
 	@Override
 	public BufferedImage display(BufferedImage image){
 		image = Main.sig.makeBackground(getRgb());
-		if(image == null){System.out.println("for some reason its null..");}else{System.out.println("is not null! image size is "+image.getWidth()+" by "+image.getHeight());}
 		if(getChildCount() > 0){
 			//send this to each child to rerender(filter)
 			for(int i = 0; i< getChildCount(); i++){

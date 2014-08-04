@@ -25,14 +25,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
-import com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.BuildingBlock;
 
 public class FilterRotate extends Filter {
 	private static final long serialVersionUID = 1L;
-	public boolean ISFILTER = true;
 	private double angle = 0;
 	private double anchorX = 0;
 	private double anchorY = 0;
@@ -95,7 +91,7 @@ public class FilterRotate extends Filter {
 	/**
 	 * @param angle the angle to set
 	 */
-	public void setAngle(double angle) {
+	public void setAngle(int angle) {
 		this.angle = angle;
 	}
 
@@ -140,7 +136,7 @@ public class FilterRotate extends Filter {
 		//Angle
 		JLabel angleLab = new JLabel("Angle:");
 		final JSpinner angleSpinner = new JSpinner();
-		angleSpinner.setModel(new SpinnerNumberModel(getAngle(),0,359,1));
+		angleSpinner.setModel(new SpinnerNumberModel((int)getAngle(),0,359,1));
 		//mySpinner.setEditor(new JSpinner.NumberEditor(mySpinner,"##.#"));
 		final JSlider angleSlider = new JSlider(JSlider.HORIZONTAL, 0, 359, (int) getAngle());angleSlider.setSize(100, 10);
 		angleSlider.addChangeListener(new ChangeListener(){
@@ -302,6 +298,7 @@ public class FilterRotate extends Filter {
 				setAnchorRel(relButton.isSelected());
 				saveObject();
 				Main.ImageWindow.update();
+				Main.BlockWindow.blocks.reload();
 				d.dispose();
 			}
 		});
@@ -309,7 +306,7 @@ public class FilterRotate extends Filter {
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				setName(oldname);
-				setAngle(oldangle);
+				setAngle((int)oldangle);
 				setAnchorX(oldanchorx);
 				setAnchorY(oldanchory);
 				setAnchor(oldanchor);
@@ -341,23 +338,12 @@ public class FilterRotate extends Filter {
 	}
 
 	@Override
-	public BufferedImage display(BufferedImage image){
+	protected BufferedImage generateImage(BufferedImage image){
 		if(isAnchorRel()){
 			image = Main.sig.filter.rotate(image, getAngle(), getAnchor());
 		}
 		else{
 			image = Main.sig.filter.rotate(image, getAngle(), getAnchorX(), getAnchorY());
-		}
-		if(getChildCount() > 0){
-			//send this to each child to rerender(filter)
-			for(int i = 0; i< getChildCount(); i++){
-				if(!((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).isFilter()){
-					image = Main.sig.filter.composite(image, ((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).display(image), 0, 0);
-				}
-				else{//if filter
-					image = ((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).display(image);
-				}
-			}
 		}
 		return image;
 	}

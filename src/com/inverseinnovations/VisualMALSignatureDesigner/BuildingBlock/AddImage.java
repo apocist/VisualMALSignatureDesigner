@@ -239,6 +239,7 @@ public class AddImage extends BuildingBlock {
 				setY((int) ySpinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
+				Main.BlockWindow.blocks.reload();
 				d.dispose();
 			}
 		});

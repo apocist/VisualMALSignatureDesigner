@@ -552,6 +552,7 @@ public class AddText extends BuildingBlock {
 				setAngdeg((int) angleSpinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
+				Main.BlockWindow.blocks.reload();
 				d.dispose();
 			}
 		});

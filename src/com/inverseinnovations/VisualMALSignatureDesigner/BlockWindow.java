@@ -90,6 +90,7 @@ public class BlockWindow {
 						if(blocks.getCurrentNode() != null){
 							if(blocks.getCurrentNode() != blocks.getRootNode()){
 								confirmDeleteBlockDialog();
+								Main.ImageWindow.update();
 							}
 						}
 					}
@@ -144,7 +145,7 @@ public class BlockWindow {
 		String longestBlockName = " Anime Thumbnail ";
 
 		//show block selection panel
-		String[] blockTypes = {"Background","Text","Image","Anime Thumbnail","Anime Title","Anime Status"};
+		String[] blockTypes = {"Background","Text","Anime Title","Anime Status","Anime Episodes","Image","Anime Thumbnail"};
 		final JList<String> blockList = new JList<String>(blockTypes); //data has type Object[]
 		blockList.setPrototypeCellValue(longestBlockName);
 		blockList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -161,7 +162,7 @@ public class BlockWindow {
 		blockListPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
 		//show filter selection panel
-		String[] filterTypes = {"Rotate"};
+		String[] filterTypes = {"Perspective","Rotate","Unsharp"};
 		final JList<String> filterList = new JList<String>(filterTypes); //data has type Object[]
 		filterList.setPrototypeCellValue(longestBlockName);
 		filterList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -233,11 +234,24 @@ public class BlockWindow {
 						d.dispose();
 						child = new AddStatus(Main);
 						break;
+					case "Anime Episodes":
+						d.dispose();
+						child = new AddEpisodes(Main);
+						break;
+					case "Perspective":
+						d.dispose();
+						child = new FilterPerspective(Main);
+						break;
 					case "Rotate":
 						d.dispose();
 						child = new FilterRotate(Main);
 						break;
+					case "Unsharp":
+						d.dispose();
+						child = new FilterUnsharp(Main);
+						break;
 					}
+
 					blocks.addObject(child);
 					child.settingsDialog(blockFrame);
 				}

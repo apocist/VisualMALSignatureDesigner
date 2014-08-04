@@ -6,29 +6,21 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
-import com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.BuildingBlock;
 
 public class FilterPerspective extends Filter {
 	private static final long serialVersionUID = 1L;
@@ -109,30 +101,30 @@ public class FilterPerspective extends Filter {
 	/**
 	 * @param x0 and y0 to set
 	 */
-	public void setTopLeft(float x0, float y0) {
-		this.x0 = x0;
-		this.y0 = y0;
+	public void setTopLeft(double x0, double y0) {
+		this.x0 = (float)x0;
+		this.y0 = (float)y0;
 	}
 	/**
 	 * @param x1 and y1 to set
 	 */
-	public void setTopRight(float x1, float y1) {
-		this.x1 = x1;
-		this.y1 = y1;
+	public void setTopRight(double x1, double y1) {
+		this.x1 = (float)x1;
+		this.y1 = (float)y1;
 	}
 	/**
 	 * @param x2 and y2 to set
 	 */
-	public void setBottomRight(float x2, float y2) {
-		this.x2 = x2;
-		this.y2 = y2;
+	public void setBottomRight(double x2, double y2) {
+		this.x2 = (float)x2;
+		this.y2 = (float)y2;
 	}
 	/**
 	 * @param x3 and y3 to set
 	 */
-	public void setBottomLeft(float x3, float y3) {
-		this.x3 = x3;
-		this.y3 = y3;
+	public void setBottomLeft(double x3, double y3) {
+		this.x3 = (float)x3;
+		this.y3 = (float)y3;
 	}
 
 	@Override
@@ -144,6 +136,7 @@ public class FilterPerspective extends Filter {
 		final float oldx3 = getX3();	final float oldy3 = getY3();
 
 		final JDialog d = new JDialog(owner, "Rotate Settings", true);
+		Main.ImageWindow.update();
 
 		//Name
 		JLabel text = new JLabel("Name:");
@@ -161,19 +154,19 @@ public class FilterPerspective extends Filter {
 		//locations
 		JLabel topleftLab = new JLabel("Top Left: ");
 		final JSpinner x0Spinner = new JSpinner();
-		x0Spinner.setModel(new SpinnerNumberModel(getX0(),0,9999,1));
+		x0Spinner.setModel(new SpinnerNumberModel(getX0(),-9999,9999,1));
 		x0Spinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				setTopLeft((float)x0Spinner.getValue(),getY0());
+				setTopLeft((double)x0Spinner.getValue(),getY0());
 				saveObject();
 				Main.ImageWindow.update();
 			}
 		});
 		final JSpinner y0Spinner = new JSpinner();
-		y0Spinner.setModel(new SpinnerNumberModel(getY0(),0,9999,1));
+		y0Spinner.setModel(new SpinnerNumberModel(getY0(),-9999,9999,1));
 		y0Spinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				setTopLeft(getX0(),(float)y0Spinner.getValue());
+				setTopLeft(getX0(),(double)y0Spinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
 			}
@@ -184,7 +177,7 @@ public class FilterPerspective extends Filter {
 		x1Spinner.setModel(new SpinnerNumberModel(getX1(),0,9999,1));
 		x1Spinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				setTopRight((float)x1Spinner.getValue(),getY1());
+				setTopRight((double)x1Spinner.getValue(),getY1());
 				saveObject();
 				Main.ImageWindow.update();
 			}
@@ -193,7 +186,7 @@ public class FilterPerspective extends Filter {
 		y1Spinner.setModel(new SpinnerNumberModel(getY1(),0,9999,1));
 		y1Spinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				setTopRight(getX1(),(float)y1Spinner.getValue());
+				setTopRight(getX1(),(double)y1Spinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
 			}
@@ -216,7 +209,62 @@ public class FilterPerspective extends Filter {
 		topPane.add(y1Spinner);
 		topPane.add(Box.createHorizontalGlue());
 
-		//TODO add bottom
+		JLabel bottomleftLab = new JLabel("Bottom Left: ");
+		final JSpinner x3Spinner = new JSpinner();
+		x3Spinner.setModel(new SpinnerNumberModel(getX3(),0,9999,1));
+		x3Spinner.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				setBottomLeft((double)x3Spinner.getValue(),getY3());
+				saveObject();
+				Main.ImageWindow.update();
+			}
+		});
+		final JSpinner y3Spinner = new JSpinner();
+		y3Spinner.setModel(new SpinnerNumberModel(getY3(),0,9999,1));
+		y3Spinner.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				setBottomLeft(getX3(),(double)y3Spinner.getValue());
+				saveObject();
+				Main.ImageWindow.update();
+			}
+		});
+
+		JLabel bottomrightLab = new JLabel("Bottom Right: ");
+		final JSpinner x2Spinner = new JSpinner();
+		x2Spinner.setModel(new SpinnerNumberModel(getX2(),0,9999,1));
+		x2Spinner.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				setBottomRight((double)x2Spinner.getValue(),getY2());
+				saveObject();
+				Main.ImageWindow.update();
+			}
+		});
+		final JSpinner y2Spinner = new JSpinner();
+		y2Spinner.setModel(new SpinnerNumberModel(getY2(),0,9999,1));
+		y2Spinner.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				setBottomRight(getX2(),(double)y2Spinner.getValue());
+				saveObject();
+				Main.ImageWindow.update();
+			}
+		});
+
+
+
+		JPanel bottomPane = new JPanel();
+		bottomPane.setLayout(new BoxLayout(bottomPane, BoxLayout.LINE_AXIS));
+		bottomPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
+		bottomPane.add(Box.createHorizontalGlue());
+		bottomPane.add(bottomleftLab);
+		bottomPane.add(Box.createRigidArea(new Dimension(5, 0)));
+		bottomPane.add(x3Spinner);
+		bottomPane.add(y3Spinner);
+		bottomPane.add(Box.createRigidArea(new Dimension(15, 0)));
+		bottomPane.add(bottomrightLab);
+		bottomPane.add(Box.createRigidArea(new Dimension(10, 0)));
+		bottomPane.add(x2Spinner);
+		bottomPane.add(y2Spinner);
+		topPane.add(Box.createHorizontalGlue());
 
 		//Content
 		JPanel contentPanel = new JPanel();
@@ -233,11 +281,13 @@ public class FilterPerspective extends Filter {
 			public void actionPerformed(ActionEvent e){
 				//save and close
 				if(named.getText() != ""){setName(named.getText());}
-				setTopLeft((float)x0Spinner.getValue(),(float)y0Spinner.getValue());
-				setTopRight((float)x1Spinner.getValue(),(float)y1Spinner.getValue());
-				//XXX add bottom
+				setTopLeft((double)x0Spinner.getValue(),(double)y0Spinner.getValue());
+				setTopRight((double)x1Spinner.getValue(),(double)y1Spinner.getValue());
+				setBottomRight((double)x2Spinner.getValue(),(double)y2Spinner.getValue());
+				setBottomLeft((double)x3Spinner.getValue(),(double)y3Spinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
+				Main.BlockWindow.blocks.reload();
 				d.dispose();
 			}
 		});
@@ -245,11 +295,10 @@ public class FilterPerspective extends Filter {
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				setName(oldname);
-				setAngle(oldangle);
-				setAnchorX(oldanchorx);
-				setAnchorY(oldanchory);
-				setAnchor(oldanchor);
-				setAnchorRel(oldrel);
+				setTopLeft(oldx0,oldy0);
+				setTopRight(oldx1,oldy1);
+				setBottomRight(oldx2,oldy2);
+				setBottomLeft(oldx3,oldy3);
 				saveObject();
 				Main.ImageWindow.update();
 				d.dispose();
@@ -276,6 +325,7 @@ public class FilterPerspective extends Filter {
 		return d;
 	}
 
+	/*
 	@Override
 	public BufferedImage display(BufferedImage image){
 		image = Main.sig.filter.perspective(image, getX0(), getY0(), getX1(), getY1(), getX2(), getY2(), getX3(), getY3());
@@ -291,5 +341,9 @@ public class FilterPerspective extends Filter {
 			}
 		}
 		return image;
+	}*/
+	@Override
+	protected BufferedImage generateImage(BufferedImage image){
+		return Main.sig.filter.perspective(image, getX0(), getY0(), getX1(), getY1(), getX2(), getY2(), getX3(), getY3());
 	}
 }

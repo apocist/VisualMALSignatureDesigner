@@ -2,6 +2,10 @@ package com.inverseinnovations.VisualMALSignatureDesigner;
 
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -169,13 +173,41 @@ public class DynamicTree extends JPanel {
 				if(index < (node.getParent().getChildCount()-1)) {
 					treeModel.insertNodeInto(node, (BuildingBlock)node.getParent(), index+1);    // move the node
 					// reload revalidates the look of the JTree on screen
-					treeModel.reload();
+					reload();
 					Main.ImageWindow.update();
 					tree.setSelectionPath(new TreePath(node.getPath()));//reselect the block
 				}
 			}
 		}
 	}
+	public void reload(){
+		TreePath nodesPath = new TreePath(rootNode.getPath());
+		TreePath currentSel = tree.getLeadSelectionPath();
+		List<TreePath> currOpen  = getCurrExpandedPaths(nodesPath);
+		treeModel.reload();
+		reExpandPaths(currOpen);
+		tree.setSelectionPath(currentSel);
+	}
+
+	private List<TreePath> getCurrExpandedPaths(TreePath currPath){
+	    List<TreePath> paths = new ArrayList<TreePath>();
+	    Enumeration<TreePath> expandEnum = tree.getExpandedDescendants(currPath);
+	    if (expandEnum == null)
+	        return null;
+
+	    while (expandEnum.hasMoreElements())
+	        paths.add(expandEnum.nextElement());
+
+	    return paths;
+	}
+
+	private void reExpandPaths(List<TreePath> expPaths){
+	    if(expPaths == null)
+	        return;
+	    for(TreePath tp : expPaths)
+	        tree.expandPath(tp);
+	}
+
 
 	class MyTreeModelListener implements TreeModelListener {
 		public void treeNodesChanged(TreeModelEvent e) {
