@@ -3,7 +3,7 @@ package com.inverseinnovations.VisualMALSignatureDesigner;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -44,6 +45,7 @@ public class BlockWindow {
 			public void run(){
 				blockFrame = new JFrame("Tree Demo");
 				blockFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+				blocks = new DynamicTree(Main);
 
 				//Menu
 				JMenuBar menuBar = new JMenuBar();//Create the menu bar.
@@ -69,11 +71,12 @@ public class BlockWindow {
 
 				menuBar.add(menu);
 
-				blockFrame.setJMenuBar(menuBar);
-				//Content
+				menuBar.add(Box.createGlue());//divides item to sides
 
-				JButton addButton = new JButton("Add");
-				addButton.addActionListener(new ActionListener(){
+				JButton menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/addBut.png"));
+				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
+				menuBut.setToolTipText("Add a new Block/Filter");
+				menuBut.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						if(blocks.getCurrentNode() == null){
 							createBlockSelectionDialog();
@@ -83,21 +86,12 @@ public class BlockWindow {
 						}
 					}
 				});
+				menuBar.add(menuBut);
 
-				JButton removeButton = new JButton("Remove");
-				removeButton.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						if(blocks.getCurrentNode() != null){
-							if(blocks.getCurrentNode() != blocks.getRootNode()){
-								confirmDeleteBlockDialog();
-								Main.ImageWindow.update();
-							}
-						}
-					}
-				});
-
-				JButton editButton = new JButton("Edit");
-				editButton.addActionListener(new ActionListener(){
+				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/editBut.png"));
+				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
+				menuBut.setToolTipText("Edit the selected Block/Filter");
+				menuBut.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						if(blocks.getCurrentNode() == null){
 							blocks.rootNode.settingsDialog(blockFrame);
@@ -107,21 +101,49 @@ public class BlockWindow {
 						}
 					}
 				});
+				menuBar.add(menuBut);
 
-				JPanel panel = new JPanel(new GridLayout(0, 3));
-				panel.add(addButton);
-				panel.add(editButton);
-				panel.add(removeButton);
-				blockFrame.add(panel, BorderLayout.NORTH);
+				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/upBut.png"));
+				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
+				menuBut.setToolTipText("Move the Block/Filter up");
+				menuBut.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						blocks.moveNodeUp();
+					}
+				});
+				menuBar.add(menuBut);
 
-				blocks = new DynamicTree(Main);
-				populateTree(blocks);
+				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/downBut.png"));
+				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
+				menuBut.setToolTipText("Move the Block/Filter down");
+				menuBut.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						blocks.moveNodeDown();
+					}
+				});
+				menuBar.add(menuBut);
+
+				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/trashBut.png"));
+				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
+				menuBut.setToolTipText("Delete the selected Block/Filter");
+				menuBut.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if(blocks.getCurrentNode() != null){
+							if(blocks.getCurrentNode() != blocks.getRootNode()){
+								confirmDeleteBlockDialog();
+								Main.ImageWindow.update();
+							}
+						}
+					}
+				});
+				menuBar.add(menuBut);
+
+
+				blockFrame.setJMenuBar(menuBar);
 
 				// Lay everything out.
-					blocks.setPreferredSize(new Dimension(300, 150));
-					blockFrame.add(blocks, BorderLayout.CENTER);
-
-
+				blocks.setPreferredSize(new Dimension(300, 150));
+				blockFrame.add(blocks, BorderLayout.CENTER);
 
 
 				//blockFrame.getContentPane().add(imageLabel, BorderLayout.CENTER);
@@ -297,18 +319,4 @@ public class BlockWindow {
 		return d;
 	}
 
-	public void populateTree(DynamicTree treePanel) {
-
-		/*AddText p1 = new AddText(Main.sig),p2 = new AddText(Main.sig), p3 = new AddText(Main.sig);
-
-
-		treePanel.addObject(null, p1);
-		treePanel.addObject(null, p2);
-		treePanel.addObject(null, p3);
-
-		treePanel.addObject(p1, new AddBackground(Main.sig));
-		treePanel.addObject(p1, new AddText(Main.sig));
-
-		treePanel.addObject(p2, new AddText(Main.sig));*/
-	}
 }

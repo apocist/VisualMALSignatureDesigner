@@ -94,7 +94,7 @@ public class AddImage extends BuildingBlock {
 			//Main.sig.filter.perspective(Main.sig.loadImage(getFilename()), 0, 0, 200, 0, 200, 200, 0, 200);
 		}
 
-		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "/fonts");
+		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "/images");
 		FileFilter filter = new FileNameExtensionFilter("Image file", new String[] {"jpg", "jpeg","gif","png","bmp"});
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);

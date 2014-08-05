@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -39,6 +38,12 @@ public class FilterGlowInner extends Filter {
 		return amount;
 	}
 
+	/**
+	 * @param amount the amount to set
+	 */
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
 	/**
 	 * @param amount the amount to set
 	 */
@@ -67,48 +72,34 @@ public class FilterGlowInner extends Filter {
 		namePane.add(named);
 		namePane.add(Box.createHorizontalGlue());
 
-		//FIXME settings way too high...need to use Double, not int
-		//unsharp amount
-		JLabel unsharpLab = new JLabel("Amount:");
-		final JSpinner unsharpSpinner = new JSpinner();
-		unsharpSpinner.setModel(new SpinnerNumberModel((int)getAmount(),-1000,1000,1));
-		final JSlider unsharpSlider = new JSlider(JSlider.HORIZONTAL, -1000, 1000, (int)getAmount());unsharpSlider.setSize(100, 10);
-		unsharpSlider.addChangeListener(new ChangeListener(){
-			public void stateChanged(ChangeEvent e){
-				JSlider source = (JSlider)e.getSource();
-				int ang = source.getValue();
-				unsharpSpinner.setValue(ang);
-				//if (!source.getValueIsAdjusting()) {
-					setAmount((int) unsharpSpinner.getValue());
-					saveObject();
-					Main.ImageWindow.update();
-				//}
-			}
-		});
-		unsharpSpinner.addChangeListener(new ChangeListener(){
+		//glow amount
+		JLabel glowLab = new JLabel("Amount:");
+		final JSpinner glowSpinner = new JSpinner();
+		glowSpinner.setValue(getAmount());
+		glowSpinner.setModel(new SpinnerNumberModel(getAmount(),-5.0,10.0,0.025));glowSpinner.setSize(60, 10);
+		glowSpinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
 				JSpinner source = (JSpinner)e.getSource();
-				int ang = (int) source.getValue();
-				unsharpSlider.setValue(ang);
+				setAmount((double) source.getValue());
+				saveObject();
+				Main.ImageWindow.update();
 			}
 		});
 
-		JPanel unsharpPane = new JPanel();
-		unsharpPane.setLayout(new BoxLayout(unsharpPane, BoxLayout.LINE_AXIS));
-		unsharpPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
-		unsharpPane.add(Box.createHorizontalGlue());
-		unsharpPane.add(unsharpLab);
-		unsharpPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		unsharpPane.add(unsharpSlider);
-		unsharpPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		unsharpPane.add(unsharpSpinner);
-		unsharpPane.add(Box.createHorizontalGlue());
+		JPanel glowPane = new JPanel();
+		glowPane.setLayout(new BoxLayout(glowPane, BoxLayout.LINE_AXIS));
+		glowPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
+		glowPane.add(Box.createHorizontalGlue());
+		glowPane.add(glowLab);
+		glowPane.add(Box.createRigidArea(new Dimension(20, 0)));
+		glowPane.add(glowSpinner);
+		glowPane.add(Box.createHorizontalGlue());
 
 		//Content
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		contentPanel.add(Box.createVerticalGlue());
-		contentPanel.add(unsharpPane);
+		contentPanel.add(glowPane);
 		contentPanel.add(Box.createVerticalGlue());
 
 		//OK / Cancel
@@ -117,7 +108,7 @@ public class FilterGlowInner extends Filter {
 			public void actionPerformed(ActionEvent e){
 				//save and close
 				if(named.getText() != ""){setName(named.getText());}
-				setAmount((int) unsharpSpinner.getValue());
+				setAmount((double) glowSpinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
 				Main.BlockWindow.blocks.reload();
@@ -128,7 +119,7 @@ public class FilterGlowInner extends Filter {
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				setName(oldname);
-				setAmount((int)oldamount);
+				setAmount(oldamount);
 				saveObject();
 				Main.ImageWindow.update();
 				d.dispose();
