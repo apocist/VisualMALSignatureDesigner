@@ -168,6 +168,7 @@ public class AddImage extends BuildingBlock {
 		final int oldy = getY();
 
 		final JDialog d = new JDialog(owner, "Image Settings", true);
+		Main.ImageWindow.update();
 
 		//Name
 		JLabel text = new JLabel("Name:");

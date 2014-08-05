@@ -15,43 +15,22 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
-public class FilterUnsharp extends Filter {
+public class FilterSphere extends Filter {
 	private static final long serialVersionUID = 1L;
-	private double amount = 0;
 
-	public FilterUnsharp(Main Main){
-		super("UnSharp", Main);
-	}
-
-	/**
-	 * @return the amount
-	 */
-	public double getAmount() {
-		return amount;
-	}
-
-	/**
-	 * @param amount the amount to set
-	 */
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public FilterSphere(Main Main){
+		super("Sphere", Main);
 	}
 
 	@Override
 	public JDialog settingsDialog(final Frame owner){
 		final String oldname = getName();
-		final double oldamount = getAmount();
 
-		final JDialog d = new JDialog(owner, "Unsharp Settings", true);
+		final JDialog d = new JDialog(owner, "Sphere has no Settings", true);
 		Main.ImageWindow.update();
 
 		//Name
@@ -67,56 +46,12 @@ public class FilterUnsharp extends Filter {
 		namePane.add(named);
 		namePane.add(Box.createHorizontalGlue());
 
-		//unsharp amount
-		JLabel unsharpLab = new JLabel("Amount:");
-		final JSpinner unsharpSpinner = new JSpinner();
-		unsharpSpinner.setModel(new SpinnerNumberModel((int)getAmount(),-1000,1000,1));
-		final JSlider unsharpSlider = new JSlider(JSlider.HORIZONTAL, -1000, 1000, (int)getAmount());unsharpSlider.setSize(100, 10);
-		unsharpSlider.addChangeListener(new ChangeListener(){
-			public void stateChanged(ChangeEvent e){
-				JSlider source = (JSlider)e.getSource();
-				int ang = source.getValue();
-				unsharpSpinner.setValue(ang);
-				//if (!source.getValueIsAdjusting()) {
-					setAmount((int) unsharpSpinner.getValue());
-					saveObject();
-					Main.ImageWindow.update();
-				//}
-			}
-		});
-		unsharpSpinner.addChangeListener(new ChangeListener(){
-			public void stateChanged(ChangeEvent e){
-				JSpinner source = (JSpinner)e.getSource();
-				int ang = (int) source.getValue();
-				unsharpSlider.setValue(ang);
-			}
-		});
-
-		JPanel unsharpPane = new JPanel();
-		unsharpPane.setLayout(new BoxLayout(unsharpPane, BoxLayout.LINE_AXIS));
-		unsharpPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
-		unsharpPane.add(Box.createHorizontalGlue());
-		unsharpPane.add(unsharpLab);
-		unsharpPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		unsharpPane.add(unsharpSlider);
-		unsharpPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		unsharpPane.add(unsharpSpinner);
-		unsharpPane.add(Box.createHorizontalGlue());
-
-		//Content
-		JPanel contentPanel = new JPanel();
-		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-		contentPanel.add(Box.createVerticalGlue());
-		contentPanel.add(unsharpPane);
-		contentPanel.add(Box.createVerticalGlue());
-
 		//OK / Cancel
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				//save and close
 				if(named.getText() != ""){setName(named.getText());}
-				setAmount((int) unsharpSpinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
 				Main.BlockWindow.blocks.reload();
@@ -127,7 +62,6 @@ public class FilterUnsharp extends Filter {
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				setName(oldname);
-				setAmount((int)oldamount);
 				saveObject();
 				Main.ImageWindow.update();
 				d.dispose();
@@ -145,7 +79,6 @@ public class FilterUnsharp extends Filter {
 
 		Container contentPane = d.getContentPane();
 		contentPane.add(namePane, BorderLayout.NORTH);
-		contentPane.add(contentPanel, BorderLayout.CENTER);
 		contentPane.add(buttonPane, BorderLayout.PAGE_END);
 
 		d.setLocationRelativeTo(owner);
@@ -154,9 +87,8 @@ public class FilterUnsharp extends Filter {
 		return d;
 	}
 
-
 	@Override
 	protected BufferedImage generateImage(BufferedImage image){
-		return Main.sig.filter.unsharp(image, getAmount());
+		return Main.sig.filter.sphere(image);
 	}
 }

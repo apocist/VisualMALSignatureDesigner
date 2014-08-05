@@ -119,6 +119,7 @@ public class FilterRotate extends Filter {
 		final boolean oldrel = isAnchorRel();
 
 		final JDialog d = new JDialog(owner, "Rotate Settings", true);
+		Main.ImageWindow.update();
 
 		//Name
 		JLabel text = new JLabel("Name:");

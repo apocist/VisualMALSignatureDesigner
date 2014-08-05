@@ -29,6 +29,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -53,9 +54,11 @@ public class AddText extends BuildingBlock {
 
 	public AddText(Main Main){
 		super("Text", Main);
+		setTextFont(Main.sig.newFont(UIManager.getDefaults().getFont("TabbedPane.font").getFamily(), "plain", 12, "#000000"));
 	}
 	public AddText(String name,Main Main){
 		super(name, Main);
+		setTextFont(Main.sig.newFont(UIManager.getDefaults().getFont("TabbedPane.font").getFamily(), "plain", 12, "#000000"));
 	}
 
 	/**
@@ -175,51 +178,7 @@ public class AddText extends BuildingBlock {
 		final JComboBox<String> fontBox = new JComboBox<String>(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());fontBox.setEditable(false);if(getTextFont() != null){fontBox.addItem(getTextFont().getFontname());fontBox.setSelectedItem(getTextFont().getFontname());}
 
 		final JButton fontBut = new JButton("...");
-		fontBut.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				File dir = new File(System.getProperty("user.dir") + "/fonts");
-				if(dir.isDirectory() && dir.canRead()){
-					fc.setCurrentDirectory(dir);
-					int returnVal = fc.showOpenDialog(d);
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						File file = fc.getSelectedFile();
-						if(file.isFile()){
-							String extension = "";
-							int i = file.getName().lastIndexOf('.');
-							if (i > 0) {
-								extension = file.getName().substring(i+1);
-							}
-							if(extension.equalsIgnoreCase("ttf")){
-								if(file.getParentFile().compareTo(dir) == 0){//is in the Fonts folder already
-									//set the name
-									//fontField.setText(file.getName());
 
-									fontBox.addItem(file.getName());
-									fontBox.setSelectedItem(file.getName());
-								}
-								else{//not in fonts folder
-									//copy to fonts folder //TODO check
-									System.out.println("not in folder, copying...");
-									try {
-										Files.copy(file.toPath(), dir.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-										//fontField.setText(file.getName());
-										fontBox.addItem(file.getName());
-										fontBox.setSelectedItem(file.getName());
-										System.out.println("Copied.");
-									}
-									catch (IOException e1) {
-										System.out.println("!!COPY FAILED!!");
-									}
-								}
-							}
-						}
-					}
-				}
-				else{//no access to /fonts
-					JOptionPane.showMessageDialog(d, "ERROR: Fonts folder does not exist, not installed correctly.");
-				}
-			}
-		});
 
 		JPanel fontPane = new JPanel();
 		fontPane.setLayout(new BoxLayout(fontPane, BoxLayout.LINE_AXIS));
@@ -263,6 +222,69 @@ public class AddText extends BuildingBlock {
 		//Color
 		final JTextField colorField = new JTextField();colorField.setText("#000000");if(getTextFont() != null){colorField.setText(getTextFont().getHexColor());}
 		JButton colorBut = new JButton("Color:");
+
+		fontBox.addItemListener(new ItemListener(){
+	        public void itemStateChanged(ItemEvent e){
+	        	setTextFont(Main.sig.newFont((String)fontBox.getSelectedItem(), ((String)styleBox.getSelectedItem()).toLowerCase(), (int)sizeSpinner.getValue(), colorField.getText()));
+				saveObject();
+				Main.ImageWindow.update();
+	        }
+	    });
+		fontBut.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				File dir = new File(System.getProperty("user.dir") + "/fonts");
+				if(dir.isDirectory() && dir.canRead()){
+					fc.setCurrentDirectory(dir);
+					int returnVal = fc.showOpenDialog(d);
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File file = fc.getSelectedFile();
+						if(file.isFile()){
+							String extension = "";
+							int i = file.getName().lastIndexOf('.');
+							if (i > 0) {
+								extension = file.getName().substring(i+1);
+							}
+							if(extension.equalsIgnoreCase("ttf")){
+								if(file.getParentFile().compareTo(dir) == 0){//is in the Fonts folder already
+									//set the name
+									//fontField.setText(file.getName());
+
+									fontBox.addItem(file.getName());
+									fontBox.setSelectedItem(file.getName());
+								}
+								else{//not in fonts folder
+									//copy to fonts folder //TODO check
+									System.out.println("not in folder, copying...");
+									try {
+										Files.copy(file.toPath(), dir.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+										//fontField.setText(file.getName());
+										fontBox.addItem(file.getName());
+										fontBox.setSelectedItem(file.getName());
+										System.out.println("Copied.");
+									}
+									catch (IOException e1) {
+										System.out.println("!!COPY FAILED!!");
+									}
+									setTextFont(Main.sig.newFont((String)fontBox.getSelectedItem(), ((String)styleBox.getSelectedItem()).toLowerCase(), (int)sizeSpinner.getValue(), colorField.getText()));
+									saveObject();
+									Main.ImageWindow.update();
+								}
+							}
+						}
+					}
+				}
+				else{//no access to /fonts
+					JOptionPane.showMessageDialog(d, "ERROR: Fonts folder does not exist, not installed correctly.");
+				}
+			}
+		});
+		styleBox.addItemListener(new ItemListener(){
+	        public void itemStateChanged(ItemEvent e){
+	        	setTextFont(Main.sig.newFont((String)fontBox.getSelectedItem(), ((String)styleBox.getSelectedItem()).toLowerCase(), (int)sizeSpinner.getValue(), colorField.getText()));
+				saveObject();
+				Main.ImageWindow.update();
+	        }
+	    });
 		colorBut.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				final JDialog colorD = new JDialog(d, "Font Color", true);
@@ -284,6 +306,14 @@ public class AddText extends BuildingBlock {
 				}
 				cc.setChooserPanels(newcolorPanel);
 				cc.setPreviewPanel(new JPanel());
+				cc.getSelectionModel().addChangeListener(new ChangeListener(){
+					public void stateChanged(ChangeEvent e){
+						colorField.setText(Main.toHexString(cc.getColor()));
+						setTextFont(Main.sig.newFont((String)fontBox.getSelectedItem(), ((String)styleBox.getSelectedItem()).toLowerCase(), (int)sizeSpinner.getValue(), Main.toHexString(cc.getColor())));
+						saveObject();
+						Main.ImageWindow.update();
+					}
+				});
 
 				JPanel colorPane = new JPanel();
 				colorPane.setLayout(new BoxLayout(colorPane, BoxLayout.PAGE_AXIS));
@@ -296,6 +326,7 @@ public class AddText extends BuildingBlock {
 					public void actionPerformed(ActionEvent e){
 						//save and close
 						colorField.setText(Main.toHexString(cc.getColor()));
+						setTextFont(Main.sig.newFont((String)fontBox.getSelectedItem(), ((String)styleBox.getSelectedItem()).toLowerCase(), (int)sizeSpinner.getValue(), Main.toHexString(cc.getColor())));
 						colorD.dispose();
 					}
 				});
@@ -322,6 +353,13 @@ public class AddText extends BuildingBlock {
 				colorD.setLocationRelativeTo(d);
 				colorD.pack();
 				colorD.setVisible(true);
+			}
+		});
+		sizeSpinner.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				setTextFont(Main.sig.newFont((String)fontBox.getSelectedItem(), ((String)styleBox.getSelectedItem()).toLowerCase(), (int)sizeSpinner.getValue(), colorField.getText()));
+				saveObject();
+				Main.ImageWindow.update();
 			}
 		});
 
@@ -380,6 +418,7 @@ public class AddText extends BuildingBlock {
 		contentPane.add(buttonPane, BorderLayout.PAGE_END);
 
 		//d.setPreferredSize(new Dimension(400,130));
+
 		d.setLocationRelativeTo(owner);
 		d.pack();
 		d.setVisible(true);
@@ -396,6 +435,7 @@ public class AddText extends BuildingBlock {
 		final int oldangdeg = getAngdeg();
 
 		final JDialog d = new JDialog(owner, getClass().getSimpleName()+" Settings", true);
+		Main.ImageWindow.update();
 
 		//Name
 		JLabel text = new JLabel("Name:");

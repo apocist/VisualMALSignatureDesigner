@@ -142,12 +142,22 @@ public class BlockWindow {
 	public JDialog createBlockSelectionDialog(){
 		final JDialog d = new JDialog(blockFrame, "Add Block", true);
 
-		String longestBlockName = " Anime Thumbnail ";
+		//which has the logest name...?
+		BuildingBlock longestBlock = new AddThumbnail(Main);
 
 		//show block selection panel
-		String[] blockTypes = {"Background","Text","Anime Title","Anime Status","Anime Episodes","Image","Anime Thumbnail"};
-		final JList<String> blockList = new JList<String>(blockTypes); //data has type Object[]
-		blockList.setPrototypeCellValue(longestBlockName);
+		BuildingBlock[] blockTypes = {
+				new AddBackground(Main),
+				new AddText(Main),
+				new AddTitle(Main),
+				new AddStatus(Main),
+				new AddEpisodes(Main),
+				new AddTime(Main),
+				new AddImage(Main),
+				new AddThumbnail(Main)
+		};
+		final JList<BuildingBlock> blockList = new JList<BuildingBlock>(blockTypes); //data has type Object[]
+		blockList.setPrototypeCellValue(longestBlock);
 		blockList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		blockList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		blockList.setVisibleRowCount(-1);
@@ -162,9 +172,23 @@ public class BlockWindow {
 		blockListPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
 		//show filter selection panel
-		String[] filterTypes = {"Perspective","Rotate","Unsharp"};
-		final JList<String> filterList = new JList<String>(filterTypes); //data has type Object[]
-		filterList.setPrototypeCellValue(longestBlockName);
+		BuildingBlock[] filterTypes = {
+				new FilterBlurSimple(Main),
+				new FilterChrome(Main),
+				new FilterEmboss(Main),
+				new FilterGlowInner(Main),
+				new FilterOpacity(Main),
+				new FilterPerspective(Main),
+				new FilterRotate(Main),
+				new FilterShadowSimple(Main),
+				new FilterSmear(Main),
+				new FilterSolarize(Main),
+				new FilterSparkle(Main),
+				new FilterSphere(Main),
+				new FilterUnsharp(Main)
+		};
+		final JList<BuildingBlock> filterList = new JList<BuildingBlock>(filterTypes); //data has type Object[]
+		filterList.setPrototypeCellValue(longestBlock);
 		filterList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		filterList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		filterList.setVisibleRowCount(-1);
@@ -204,55 +228,13 @@ public class BlockWindow {
 
 		okButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				JList<String> selectedList;
+				JList<BuildingBlock> selectedList;
 				if(tabbedPane.getSelectedIndex() == 1){selectedList = filterList;}
 				else{selectedList = blockList;}
 				if(selectedList.getSelectedValue() != null){
-					BuildingBlock child = new BuildingBlock("Null", Main);
-					switch(selectedList.getSelectedValue()){
-					case "Background":
-						d.dispose();
-						child = new AddBackground(Main);
-						break;
-					case "Text":
-						d.dispose();
-						child = new AddText(Main);
-						break;
-					case "Image":
-						d.dispose();
-						child = new AddImage(Main);
-						break;
-					case "Anime Thumbnail":
-						d.dispose();
-						child = new AddThumbnail(Main);
-						break;
-					case "Anime Title":
-						d.dispose();
-						child = new AddTitle(Main);
-						break;
-					case "Anime Status":
-						d.dispose();
-						child = new AddStatus(Main);
-						break;
-					case "Anime Episodes":
-						d.dispose();
-						child = new AddEpisodes(Main);
-						break;
-					case "Perspective":
-						d.dispose();
-						child = new FilterPerspective(Main);
-						break;
-					case "Rotate":
-						d.dispose();
-						child = new FilterRotate(Main);
-						break;
-					case "Unsharp":
-						d.dispose();
-						child = new FilterUnsharp(Main);
-						break;
-					}
-
+					BuildingBlock child = selectedList.getSelectedValue();
 					blocks.addObject(child);
+					d.dispose();
 					child.settingsDialog(blockFrame);
 				}
 			}

@@ -24,34 +24,35 @@ import javax.swing.event.ChangeListener;
 
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
-public class FilterUnsharp extends Filter {
+public class FilterOpacity extends Filter {
 	private static final long serialVersionUID = 1L;
-	private double amount = 0;
+	private double amount = 100;
 
-	public FilterUnsharp(Main Main){
-		super("UnSharp", Main);
+	public FilterOpacity(Main Main){
+		super("Opacity", Main);
 	}
 
 	/**
-	 * @return the amount
+	 * @return the angle
 	 */
 	public double getAmount() {
 		return amount;
 	}
 
 	/**
-	 * @param amount the amount to set
+	 * @param angle the angle to set
 	 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+
 
 	@Override
 	public JDialog settingsDialog(final Frame owner){
 		final String oldname = getName();
 		final double oldamount = getAmount();
 
-		final JDialog d = new JDialog(owner, "Unsharp Settings", true);
+		final JDialog d = new JDialog(owner, "Opacity Settings", true);
 		Main.ImageWindow.update();
 
 		//Name
@@ -67,47 +68,48 @@ public class FilterUnsharp extends Filter {
 		namePane.add(named);
 		namePane.add(Box.createHorizontalGlue());
 
-		//unsharp amount
-		JLabel unsharpLab = new JLabel("Amount:");
-		final JSpinner unsharpSpinner = new JSpinner();
-		unsharpSpinner.setModel(new SpinnerNumberModel((int)getAmount(),-1000,1000,1));
-		final JSlider unsharpSlider = new JSlider(JSlider.HORIZONTAL, -1000, 1000, (int)getAmount());unsharpSlider.setSize(100, 10);
-		unsharpSlider.addChangeListener(new ChangeListener(){
+		//Angle
+		JLabel amountLab = new JLabel("Opacity:");
+		final JSpinner amountSpinner = new JSpinner();
+		amountSpinner.setModel(new SpinnerNumberModel((int)getAmount(),0,100,1));
+		//mySpinner.setEditor(new JSpinner.NumberEditor(mySpinner,"##.#"));
+		final JSlider amountSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) getAmount());amountSlider.setSize(100, 10);
+		amountSlider.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
 				JSlider source = (JSlider)e.getSource();
 				int ang = source.getValue();
-				unsharpSpinner.setValue(ang);
+				amountSpinner.setValue(ang);
 				//if (!source.getValueIsAdjusting()) {
-					setAmount((int) unsharpSpinner.getValue());
+					setAmount((int) amountSpinner.getValue());
 					saveObject();
 					Main.ImageWindow.update();
 				//}
 			}
 		});
-		unsharpSpinner.addChangeListener(new ChangeListener(){
+		amountSpinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
 				JSpinner source = (JSpinner)e.getSource();
 				int ang = (int) source.getValue();
-				unsharpSlider.setValue(ang);
+				amountSlider.setValue(ang);
 			}
 		});
 
-		JPanel unsharpPane = new JPanel();
-		unsharpPane.setLayout(new BoxLayout(unsharpPane, BoxLayout.LINE_AXIS));
-		unsharpPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
-		unsharpPane.add(Box.createHorizontalGlue());
-		unsharpPane.add(unsharpLab);
-		unsharpPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		unsharpPane.add(unsharpSlider);
-		unsharpPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		unsharpPane.add(unsharpSpinner);
-		unsharpPane.add(Box.createHorizontalGlue());
+		JPanel anglePane = new JPanel();
+		anglePane.setLayout(new BoxLayout(anglePane, BoxLayout.LINE_AXIS));
+		anglePane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
+		anglePane.add(Box.createHorizontalGlue());
+		anglePane.add(amountLab);
+		anglePane.add(Box.createRigidArea(new Dimension(10, 0)));
+		anglePane.add(amountSlider);
+		anglePane.add(Box.createRigidArea(new Dimension(10, 0)));
+		anglePane.add(amountSpinner);
+		anglePane.add(Box.createHorizontalGlue());
 
 		//Content
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		contentPanel.add(Box.createVerticalGlue());
-		contentPanel.add(unsharpPane);
+		contentPanel.add(anglePane);
 		contentPanel.add(Box.createVerticalGlue());
 
 		//OK / Cancel
@@ -116,7 +118,6 @@ public class FilterUnsharp extends Filter {
 			public void actionPerformed(ActionEvent e){
 				//save and close
 				if(named.getText() != ""){setName(named.getText());}
-				setAmount((int) unsharpSpinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
 				Main.BlockWindow.blocks.reload();
@@ -154,9 +155,8 @@ public class FilterUnsharp extends Filter {
 		return d;
 	}
 
-
 	@Override
 	protected BufferedImage generateImage(BufferedImage image){
-		return Main.sig.filter.unsharp(image, getAmount());
+		return Main.sig.filter.opacity(image, getAmount());
 	}
 }

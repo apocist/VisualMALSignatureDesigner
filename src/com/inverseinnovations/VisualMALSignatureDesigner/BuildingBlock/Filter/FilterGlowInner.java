@@ -24,12 +24,12 @@ import javax.swing.event.ChangeListener;
 
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
-public class FilterUnsharp extends Filter {
+public class FilterGlowInner extends Filter {
 	private static final long serialVersionUID = 1L;
 	private double amount = 0;
 
-	public FilterUnsharp(Main Main){
-		super("UnSharp", Main);
+	public FilterGlowInner(Main Main){
+		super("Glow Inner", Main);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class FilterUnsharp extends Filter {
 		final String oldname = getName();
 		final double oldamount = getAmount();
 
-		final JDialog d = new JDialog(owner, "Unsharp Settings", true);
+		final JDialog d = new JDialog(owner, "Glow Inner Settings", true);
 		Main.ImageWindow.update();
 
 		//Name
@@ -67,6 +67,7 @@ public class FilterUnsharp extends Filter {
 		namePane.add(named);
 		namePane.add(Box.createHorizontalGlue());
 
+		//FIXME settings way too high...need to use Double, not int
 		//unsharp amount
 		JLabel unsharpLab = new JLabel("Amount:");
 		final JSpinner unsharpSpinner = new JSpinner();
@@ -157,6 +158,6 @@ public class FilterUnsharp extends Filter {
 
 	@Override
 	protected BufferedImage generateImage(BufferedImage image){
-		return Main.sig.filter.unsharp(image, getAmount());
+		return Main.sig.filter.glowInner(image, getAmount());
 	}
 }
