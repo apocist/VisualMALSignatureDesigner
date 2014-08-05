@@ -1,7 +1,9 @@
 bin/*
 cache/thumbnails/*.jpg
-images/*
-fonts/*
+images/*.png
+images/*.jpg
+images/*.jpeg
+fonts/*.ttf
 *.class
 
 # Windows image file caches
