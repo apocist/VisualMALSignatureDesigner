@@ -63,6 +63,9 @@ public class BlockWindow {
 						JScrollPane textscrollPane = new JScrollPane(textArea);
 						textArea.setEditable(false);
 						textArea.setText(blocks.getRootNode().createScript(null));
+						//save button
+
+
 						d.getContentPane().add(textscrollPane, BorderLayout.CENTER);
 
 						d.pack();
@@ -178,7 +181,8 @@ public class BlockWindow {
 				new AddEpisodes(Main),
 				new AddTime(Main),
 				new AddImage(Main),
-				new AddThumbnail(Main)
+				new AddThumbnail(Main),
+				new AddEmptyImage(Main)
 		};
 		final JList<BuildingBlock> blockList = new JList<BuildingBlock>(blockTypes); //data has type Object[]
 		blockList.setPrototypeCellValue(longestBlock);

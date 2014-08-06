@@ -62,7 +62,6 @@ public class ImageWindow {
 		catch(java.lang.NullPointerException e){
 			System.out.println("Signature is null");
 		}
-		//System.out.println("image updated\n");//FIXME remove later
 	}
 
 	public Point getLocation(){
