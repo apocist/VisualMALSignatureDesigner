@@ -3,7 +3,7 @@ package com.inverseinnovations.VisualMALSignatureDesigner;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import com.inverseinnovations.MALSignatureDesigner.*;
+import com.inverseinnovations.MALSignatureDesignerLite.*;
 //TODO update when Block ediited, block added, block deleted, block moved(?)
 public class Main {
 	public ImageWindow ImageWindow;

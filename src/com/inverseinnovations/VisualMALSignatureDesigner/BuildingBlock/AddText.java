@@ -39,7 +39,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import com.inverseinnovations.MALSignatureDesigner.TextFont;
+import com.inverseinnovations.MALSignatureDesignerLite.TextFont;
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
 public class AddText extends BuildingBlock {

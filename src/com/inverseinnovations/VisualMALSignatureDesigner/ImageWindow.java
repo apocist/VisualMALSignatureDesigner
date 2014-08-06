@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import com.inverseinnovations.MALSignatureDesigner.Signature;
+import com.inverseinnovations.MALSignatureDesignerLite.Signature;
 
 /**
  * Creates and manages the JFrame of the visible Signature
