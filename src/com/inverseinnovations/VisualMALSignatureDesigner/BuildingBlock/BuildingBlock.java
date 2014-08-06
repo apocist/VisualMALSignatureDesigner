@@ -144,6 +144,6 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 	 * @return
 	 */
 	public String generateScript(){
-		return null;
+		return "";
 	}
 }

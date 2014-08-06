@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -56,15 +57,16 @@ public class BlockWindow {
 				JMenuItem menuItem = new JMenuItem("Generate Script");
 				menuItem.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
-						System.out.println(blocks.getRootNode().createScript(null));
-					}
-				});
-				menu.add(menuItem);
+						final JDialog d = new JDialog(blockFrame, "MSD Script", true);
 
-				menuItem = new JMenuItem("Move Down");
-				menuItem.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						blocks.moveNodeDown();
+						JTextArea textArea = new JTextArea(20, 100);
+						JScrollPane textscrollPane = new JScrollPane(textArea);
+						textArea.setEditable(false);
+						textArea.setText(blocks.getRootNode().createScript(null));
+						d.getContentPane().add(textscrollPane, BorderLayout.CENTER);
+
+						d.pack();
+						d.setVisible(true);
 					}
 				});
 				menu.add(menuItem);

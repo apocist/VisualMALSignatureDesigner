@@ -23,7 +23,7 @@ public class Main {
 
     	//just testing stuff here
     	try {
-            Thread.sleep(300);
+            Thread.sleep(400);
         } catch (InterruptedException e) {}
         //sig.addBackground("#FF33FF"); //Place a black background(honestly not needed)
 
