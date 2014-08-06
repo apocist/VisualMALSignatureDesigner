@@ -152,5 +152,8 @@ public class AddBackground extends BuildingBlock {
 		//return final image
 		return image;
 	}
-
+	@Override
+	public String generateScript(){
+		return "sig.makeBackground(\""+getRgb()+")";
+	}
 }

@@ -37,4 +37,26 @@ public class Filter extends BuildingBlock {
 	protected BufferedImage generateImage(BufferedImage image){
 		return image;
 	}
+	@Override
+	public String createScript(String filteronly){
+		StringBuilder string  = new StringBuilder(generateScript(filteronly));
+		if(getChildCount() > 0){
+			for(int i = 0; i< getChildCount(); i++){
+				BuildingBlock block = (BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject();
+				if(block != null){
+					if(!block.isFilter()){//if not a filter
+						string = new StringBuilder("filter.composite("+string+", "+block.createScript()+", 0, 0)");
+					}
+					else{//if a filter
+						string = new StringBuilder(block.createScript(string.toString()));
+					}
+				}
+			}
+		}
+		//return final string
+		return string.toString();
+	}
+	public String generateScript(String filteronly){
+		return null;
+	}
 }

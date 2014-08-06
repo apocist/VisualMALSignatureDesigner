@@ -91,4 +91,8 @@ public class FilterShadowSimple extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.shadow(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.shadow("+filteronly+")";
+	}
 }

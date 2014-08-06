@@ -91,4 +91,8 @@ public class FilterSphere extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.sphere(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.sphere("+filteronly+")";
+	}
 }

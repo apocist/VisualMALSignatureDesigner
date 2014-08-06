@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
 public class AddEpisodes extends AddText {
@@ -99,5 +100,9 @@ public class AddEpisodes extends AddText {
 	@Override
 	public BufferedImage generateImage(){
 		return Main.sig.makeEpisodes(getId(), getX(), getY(), getTextFont(), getAlign(), getAngdeg(), getStyle());
+	}
+	@Override
+	public String generateScript(){
+		return "sig.makeEpisodes("+getId()+", "+getX()+", "+getY()+", "+generateFont()+", \""+getAlign()+"\", "+getAngdeg()+", "+getStyle()+")";
 	}
 }

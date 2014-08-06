@@ -348,4 +348,11 @@ public class FilterRotate extends Filter {
 		}
 		return image;
 	}
+	@Override
+	public String generateScript(String filteronly){
+		if(isAnchorRel()){
+			return "filter.rotate("+filteronly+", "+getAngle()+", "+getAnchor()+")";
+		}
+		return "filter.rotate("+filteronly+", "+getAngle()+", "+getAnchorX()+", "+getAnchorY()+")";
+	}
 }

@@ -91,4 +91,8 @@ public class FilterSmear extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.smear(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.smear("+filteronly+")";
+	}
 }

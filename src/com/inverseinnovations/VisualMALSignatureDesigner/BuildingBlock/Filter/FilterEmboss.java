@@ -91,4 +91,8 @@ public class FilterEmboss extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.emboss(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.emboss("+filteronly+")";
+	}
 }

@@ -55,10 +55,12 @@ public class AddText extends BuildingBlock {
 	public AddText(Main Main){
 		super("Text", Main);
 		setTextFont(Main.sig.newFont(UIManager.getDefaults().getFont("TabbedPane.font").getFamily(), "plain", 12, "#000000"));
+		setX(20);setY(20);
 	}
 	public AddText(String name,Main Main){
 		super(name, Main);
 		setTextFont(Main.sig.newFont(UIManager.getDefaults().getFont("TabbedPane.font").getFamily(), "plain", 12, "#000000"));
+		setX(20);setY(20);
 	}
 
 	/**
@@ -67,18 +69,7 @@ public class AddText extends BuildingBlock {
 	public String getText() {
 		return text;
 	}
-	/**
-	 * @return the x coord
-	 */
-	public int getX() {
-		return x;
-	}
-	/**
-	 * @return the y coord
-	 */
-	public int getY() {
-		return y;
-	}
+
 	/**
 	 * @return the textFont
 	 */
@@ -103,18 +94,7 @@ public class AddText extends BuildingBlock {
 	public void setText(String text) {
 		this.text = text;
 	}
-	/**
-	 * @param x the x coord to set
-	 */
-	public void setX(int x) {
-		this.x = x;
-	}
-	/**
-	 * @param y the y coord to set
-	 */
-	public void setY(int y) {
-		this.y = y;
-	}
+
 	/**
 	 * @param textFont the textFont to set
 	 */
@@ -639,7 +619,7 @@ public class AddText extends BuildingBlock {
 			if(getChildCount() > 0){
 				//send this to each child to rerender(filter)
 				for(int i = 0; i< getChildCount(); i++){
-					if(!(((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()) instanceof com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.Filter.Filter)){
+					if(!((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).isFilter()){
 						image = Main.sig.filter.composite(image, ((BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject()).display(image), 0, 0);
 					}
 					else{//if filter
@@ -655,5 +635,12 @@ public class AddText extends BuildingBlock {
 	}
 	protected BufferedImage generateImage(){
 		return Main.sig.makeText(getText(),  getX(), getY(), getTextFont(), getAlign(), getAngdeg());
+	}
+	@Override
+	public String generateScript(){
+		return "sig.makeText(\""+getText()+"\", "+getX()+", "+getY()+", "+generateFont()+", "+getAlign()+", "+getAngdeg()+")";
+	}
+	protected String generateFont(){
+		return "sig.newFont(\""+getTextFont().getFontname()+"\", \""+getTextFont().getStyle()+"\", "+getTextFont().getSize()+", \""+getTextFont().getHexColor()+"\")";
 	}
 }

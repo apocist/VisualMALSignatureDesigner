@@ -35,8 +35,6 @@ import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 public class AddImage extends BuildingBlock {
 	private static final long serialVersionUID = 1L;
 	private String filename = "";
-	protected int x = 0;
-	protected int y = 0;
 
 
 
@@ -53,35 +51,12 @@ public class AddImage extends BuildingBlock {
 		return filename;
 	}
 	/**
-	 * @return the x
-	 */
-	public int getX() {
-		return x;
-	}
-	/**
-	 * @return the y
-	 */
-	public int getY() {
-		return y;
-	}
-	/**
 	 * @param filename the filename to set
 	 */
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	/**
-	 * @param x the x to set
-	 */
-	public void setX(int x) {
-		this.x = x;
-	}
-	/**
-	 * @param y the y to set
-	 */
-	public void setY(int y) {
-		this.y = y;
-	}
+
 	protected JPanel settingsImage(final JDialog owner){
 
 		//Image
@@ -303,5 +278,13 @@ public class AddImage extends BuildingBlock {
 			return Main.sig.loadImage(getFilename());
 		}
 		return Main.sig.makeImage(Main.sig.getWidth()*2, Main.sig.getHeight()*2);
+	}
+	@Override
+	public String generateScript(){
+		if(!getFilename().equals("")){
+			return "sig.loadImage(\""+getFilename()+"\")";
+
+		}
+		return "sig.makeImage(100, 100)";
 	}
 }

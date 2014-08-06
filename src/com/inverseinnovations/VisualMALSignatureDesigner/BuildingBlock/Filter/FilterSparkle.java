@@ -91,4 +91,8 @@ public class FilterSparkle extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.sparkle(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.sparkle("+filteronly+")";
+	}
 }

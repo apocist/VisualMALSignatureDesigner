@@ -159,4 +159,8 @@ public class FilterOpacity extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.opacity(image, getAmount());
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.opacity("+filteronly+", "+getAmount()+")";
+	}
 }

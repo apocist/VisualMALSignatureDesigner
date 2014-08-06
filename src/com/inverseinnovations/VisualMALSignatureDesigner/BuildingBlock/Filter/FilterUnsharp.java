@@ -159,4 +159,8 @@ public class FilterUnsharp extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.unsharp(image, getAmount());
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.unsharp("+filteronly+", "+getAmount()+")";
+	}
 }

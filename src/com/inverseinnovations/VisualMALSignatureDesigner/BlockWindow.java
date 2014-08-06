@@ -53,10 +53,10 @@ public class BlockWindow {
 				JMenu menu = new JMenu("Edit");//Build the first menu.
 
 				//a group of JMenuItems
-				JMenuItem menuItem = new JMenuItem("Move Up");
+				JMenuItem menuItem = new JMenuItem("Generate Script");
 				menuItem.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
-						blocks.moveNodeUp();
+						System.out.println(blocks.getRootNode().createScript(null));
 					}
 				});
 				menu.add(menuItem);

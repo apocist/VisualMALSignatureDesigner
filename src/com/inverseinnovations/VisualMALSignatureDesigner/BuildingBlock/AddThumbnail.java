@@ -85,4 +85,8 @@ public class AddThumbnail extends AddImage {
 	protected BufferedImage generateImage(){
 		return Main.sig.loadAnimeThumbnail(getId());
 	}
+	@Override
+	public String generateScript(){
+		return "sig.loadAnimeThumbnail("+getId()+")";
+	}
 }

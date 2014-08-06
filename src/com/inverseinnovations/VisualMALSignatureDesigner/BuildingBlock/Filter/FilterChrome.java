@@ -91,4 +91,8 @@ public class FilterChrome extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.chrome(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.chrome("+filteronly+")";
+	}
 }

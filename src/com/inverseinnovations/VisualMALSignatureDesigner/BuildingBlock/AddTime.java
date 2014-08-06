@@ -66,4 +66,8 @@ public class AddTime extends AddText {
 	public BufferedImage generateImage(){
 		return Main.sig.makeTime(getId(), getX(), getY(), getTextFont(), getAlign(), getAngdeg());
 	}
+	@Override
+	public String generateScript(){
+		return "sig.makeTime("+getId()+", "+getX()+", "+getY()+", "+generateFont()+", \""+getAlign()+"\", "+getAngdeg()+")";
+	}
 }

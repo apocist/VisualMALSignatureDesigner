@@ -91,4 +91,8 @@ public class FilterSolarize extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.solarize(image);
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.solarize("+filteronly+")";
+	}
 }

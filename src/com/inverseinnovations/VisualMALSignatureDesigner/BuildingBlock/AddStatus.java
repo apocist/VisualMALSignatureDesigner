@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
 public class AddStatus extends AddText {
@@ -64,6 +65,10 @@ public class AddStatus extends AddText {
 	@Override
 	public BufferedImage generateImage(){
 		return Main.sig.makeStatus(getId(), getX(), getY(), getTextFont(), getAlign(), getAngdeg());
+	}
+	@Override
+	public String generateScript(){
+		return "sig.makeStatus("+getId()+", "+getX()+", "+getY()+", "+generateFont()+", \""+getAlign()+"\", "+getAngdeg()+")";
 	}
 }
 

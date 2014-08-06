@@ -151,4 +151,8 @@ public class FilterGlowInner extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.glowInner(image, getAmount());
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.glowInner("+filteronly+", "+getAmount()+")";
+	}
 }

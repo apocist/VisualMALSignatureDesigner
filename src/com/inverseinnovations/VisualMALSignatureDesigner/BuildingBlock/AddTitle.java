@@ -16,6 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
 public class AddTitle extends AddText {
@@ -124,5 +125,9 @@ public class AddTitle extends AddText {
 	@Override
 	public BufferedImage generateImage(){
 		return Main.sig.makeTitle(getId(), getX(), getY(), getTextFont(), getAlign(), getAngdeg(), getAirType(), getMaxLength());
+	}
+	@Override
+	public String generateScript(){
+		return "sig.makeTitle("+getId()+", "+getX()+", "+getY()+", "+generateFont()+", \""+getAlign()+"\", "+getAngdeg()+", "+getAirType()+", "+getMaxLength()+")";
 	}
 }

@@ -346,4 +346,8 @@ public class FilterPerspective extends Filter {
 	protected BufferedImage generateImage(BufferedImage image){
 		return Main.sig.filter.perspective(image, getX0(), getY0(), getX1(), getY1(), getX2(), getY2(), getX3(), getY3());
 	}
+	@Override
+	public String generateScript(String filteronly){
+		return "filter.perspective("+filteronly+", "+(int)getX0()+", "+(int)getY0()+", "+(int)getX1()+", "+(int)getY1()+", "+(int)getX2()+", "+(int)getY2()+", "+(int)getX3()+", "+(int)getY3()+")";
+	}
 }

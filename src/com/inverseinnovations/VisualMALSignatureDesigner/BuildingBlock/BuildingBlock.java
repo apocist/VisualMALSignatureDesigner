@@ -13,6 +13,8 @@ import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 public class BuildingBlock extends DefaultMutableTreeNode{
 	private static final long serialVersionUID = 1L;
 	public final boolean ISPARENTABLE = true;
+	protected int x = 0;
+	protected int y = 0;
 	private BufferedImage image;
 	private String name;
 
@@ -27,6 +29,30 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 	}
 	public boolean isFilter(){
 		return false;
+	}
+	/**
+	 * @return the x coord
+	 */
+	public int getX() {
+		return x;
+	}
+	/**
+	 * @return the y coord
+	 */
+	public int getY() {
+		return y;
+	}
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(int y) {
+		this.y = y;
 	}
 	/**
 	 * @return the image
@@ -72,5 +98,52 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 		}
 		//return final image
 		return image;
+	}
+	/**
+	 * Creates a script of MSD that will copy the current signauture
+	 * @return
+	 */
+	public String createScript(){
+		StringBuilder string  = new StringBuilder(generateScript());
+		if(getChildCount() > 0){
+			for(int i = 0; i< getChildCount(); i++){
+				BuildingBlock block = (BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject();
+				if(block != null){
+					if(!block.isFilter()){//if not a filter
+						string = new StringBuilder("filter.composite("+string+", "+block.createScript()+", 0, 0)");
+					}
+					else{//if a filter
+						string = new StringBuilder(block.createScript(string.toString()));
+					}
+				}
+			}
+		}
+		//return final string
+		return string.toString();
+	}
+	public String createScript(String filteronly){
+		StringBuilder string  = new StringBuilder(generateScript());
+		if(getChildCount() > 0){
+			for(int i = 0; i< getChildCount(); i++){
+				BuildingBlock block = (BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject();
+				if(block != null){
+					if(!block.isFilter()){//if not a filter
+						string = new StringBuilder("filter.composite("+string+", "+block.createScript(null)+", 0, 0)");
+					}
+					else{//if a filter
+						string = new StringBuilder(block.createScript(string.toString()));
+					}
+				}
+			}
+		}
+		//return final string
+		return string.toString();
+	}
+	/**
+	 * The Block specific for each command
+	 * @return
+	 */
+	public String generateScript(){
+		return null;
 	}
 }
