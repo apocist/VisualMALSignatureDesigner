@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -62,10 +63,29 @@ public class BlockWindow {
 						JTextArea textArea = new JTextArea(20, 100);
 						JScrollPane textscrollPane = new JScrollPane(textArea);
 						textArea.setEditable(false);
-						textArea.setText(blocks.getRootNode().createScript(null));
+						final String script = blocks.getRootNode().createScript(null);
+						textArea.setText(script);
 						//save button
+						JButton saveBut = new JButton("Save to sig.ini");
+						saveBut.addActionListener(new ActionListener(){
+							public void actionPerformed(ActionEvent e){
+								//save script
+								PrintWriter writer;
+								try {
+									writer = new PrintWriter("sig.ini", "UTF-8");
+									writer.print(script);
+									writer.println("sig.saveSignature(\"image.png\");");
+									writer.close();
+								}
+								catch (Exception e2) {
+								}
+								finally{
 
+								}
+							}
+						});
 
+						d.getContentPane().add(saveBut, BorderLayout.NORTH);
 						d.getContentPane().add(textscrollPane, BorderLayout.CENTER);
 
 						d.pack();

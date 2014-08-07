@@ -4,6 +4,7 @@ images/*.png
 images/*.jpg
 images/*.jpeg
 fonts/*.ttf
+sig.ini
 *.class
 
 # Windows image file caches
