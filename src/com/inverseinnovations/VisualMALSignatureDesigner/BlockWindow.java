@@ -152,7 +152,7 @@ public class BlockWindow {
 						JTextArea textArea = new JTextArea(20, 100);
 						JScrollPane textscrollPane = new JScrollPane(textArea);
 						textArea.setEditable(false);
-						final String script = blocks.getRootNode().createScript(null);
+						final String script = blocks.getRootNode().createScript(null)+"sig.saveSignature(\"image.png\");";
 						textArea.setText(script);
 						//save button
 						JButton saveBut = new JButton("Save to sig.ini");
@@ -163,7 +163,6 @@ public class BlockWindow {
 								try {
 									writer = new PrintWriter("sig.ini", "UTF-8");
 									writer.print(script);
-									writer.println("sig.saveSignature(\"image.png\");");
 									writer.close();
 								}
 								catch (Exception e2) {

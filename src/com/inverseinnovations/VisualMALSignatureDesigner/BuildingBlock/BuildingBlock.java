@@ -125,6 +125,7 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 		return string.toString();
 	}
 	public String createScript(String filteronly){
+		//do NOT output saveSignature from here
 		StringBuilder string  = new StringBuilder(generateScript());
 		if(getChildCount() > 0){
 			for(int i = 0; i< getChildCount(); i++){
