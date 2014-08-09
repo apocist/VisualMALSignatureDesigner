@@ -8,7 +8,11 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,12 +20,14 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -30,6 +36,9 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.*;
 import com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.Filter.*;
 
@@ -59,7 +68,72 @@ public class BlockWindow {
 				JMenu menu = new JMenu("File");//Build the first menu.
 
 				//a group of JMenuItems
-				JMenuItem menuItem = new JMenuItem("Generate Script");
+				JMenuItem menuItem = new JMenuItem("Open");
+				menuItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						final JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
+						FileFilter filter = new FileNameExtensionFilter("VisualMSD file", new String[] {"vmsd"});
+						fc.addChoosableFileFilter(filter);
+						fc.setFileFilter(filter);
+
+						File dir = new File(System.getProperty("user.dir"));
+						if(dir.isDirectory() && dir.canRead()){
+							fc.setCurrentDirectory(dir);
+							int returnVal = fc.showOpenDialog(blockFrame);
+							if (returnVal == JFileChooser.APPROVE_OPTION) {
+								File file = fc.getSelectedFile();
+								if(file.isFile()){
+									//load file
+									BuildingBlock block = null;
+									try {
+										block = blocks.bytesToNode(Files.readAllBytes(Paths.get(file.getPath())));
+									} catch (IOException e1) {JOptionPane.showMessageDialog(blockFrame, "ERROR: Cannot load file!");}
+									if(block != null){
+										blocks.setRootNode(block);
+									}
+								}
+							}
+						}
+					}
+				});
+				menu.add(menuItem);
+				//a group of JMenuItems
+				menuItem = new JMenuItem("Save");
+				menuItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						final JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "sig.vmsd");
+						FileFilter filter = new FileNameExtensionFilter("VisualMSD file", new String[] {"vmsd"});
+						fc.setSelectedFile(new File("sig.vmsd"));
+						fc.addChoosableFileFilter(filter);
+						fc.setFileFilter(filter);
+
+						File dir = new File(System.getProperty("user.dir"));
+						if(dir.isDirectory() && dir.canWrite()){
+							fc.setCurrentDirectory(dir);
+							int returnVal = fc.showSaveDialog(blockFrame);
+							if (returnVal == JFileChooser.APPROVE_OPTION) {
+								File file = fc.getSelectedFile();
+								BuildingBlock block = blocks.getRootNode();
+								if(file.exists()){
+									if(file.canWrite()){
+										try {
+											Files.write(Paths.get(file.getPath()), blocks.nodeToBytes(block));
+											JOptionPane.showMessageDialog(blockFrame, "Saved");
+										} catch (IOException e1) {JOptionPane.showMessageDialog(blockFrame, "ERROR: Cannot save file!");}
+									}else{JOptionPane.showMessageDialog(blockFrame, "File is not rewritable");}
+								}
+								else{
+									try {
+										Files.write(Paths.get(file.getPath()), blocks.nodeToBytes(block));
+										JOptionPane.showMessageDialog(blockFrame, "Saved");
+									} catch (IOException e1) {JOptionPane.showMessageDialog(blockFrame, "ERROR: Cannot save file!");}
+								}
+							}
+						}else{JOptionPane.showMessageDialog(blockFrame, "Dir is not writable");}
+					}
+				});
+				menu.add(menuItem);
+				menuItem = new JMenuItem("Generate Script");
 				menuItem.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						final JDialog d = new JDialog(blockFrame, "MSD Script", true);

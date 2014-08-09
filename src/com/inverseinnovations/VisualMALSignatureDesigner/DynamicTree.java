@@ -214,8 +214,15 @@ public class DynamicTree extends JPanel {
 	}
 
 	public BuildingBlock cloneNode(BuildingBlock node){
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		BuildingBlock theReturn = null;
+
+		byte[] bytes = nodeToBytes(node);
+		theReturn = bytesToNode(bytes);
+		return theReturn;
+	}
+
+	public byte[] nodeToBytes(BuildingBlock node){
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = null;
 		try {
 			oos = new ObjectOutputStream(bos);
@@ -229,7 +236,11 @@ public class DynamicTree extends JPanel {
 			} catch (IOException e) {}
 		}
 
-		byte[] bytes = bos.toByteArray();
+		return bos.toByteArray();
+	}
+
+	public BuildingBlock bytesToNode(byte[] bytes){
+		BuildingBlock theReturn = null;
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -238,6 +249,20 @@ public class DynamicTree extends JPanel {
 		}
 		catch (Exception e) {System.out.println("ObjectInputStream error");}
 		return theReturn;
+	}
+
+	public void setRootNode(BuildingBlock node){
+		if(node != null){
+			if(node instanceof InitSignature){
+				rootNode = node;
+				treeModel = new DefaultTreeModel(rootNode);
+				tree.setModel(treeModel);
+				rootNode.reinit(Main);
+				reload();
+				Main.ImageWindow.update();
+			}
+			else{System.out.println("Not a root node");}
+		}
 	}
 
 	class MyTreeModelListener implements TreeModelListener {
