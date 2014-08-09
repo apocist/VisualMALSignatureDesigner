@@ -22,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -68,7 +67,17 @@ public class BlockWindow {
 				JMenu menu = new JMenu("File");//Build the first menu.
 
 				//a group of JMenuItems
-				JMenuItem menuItem = new JMenuItem("Open");
+				JMenuItem menuItem = new JMenuItem("New");
+				menuItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						int dialogResult = JOptionPane.showConfirmDialog (null, "Clear the current Signature? (Might not be saved)","Warning",JOptionPane.YES_NO_OPTION);
+						if(dialogResult == JOptionPane.YES_OPTION){
+							blocks.clear();
+						}
+					}
+				});
+				menu.add(menuItem);
+				menuItem = new JMenuItem("Open");
 				menuItem.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						final JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
@@ -97,7 +106,6 @@ public class BlockWindow {
 					}
 				});
 				menu.add(menuItem);
-				//a group of JMenuItems
 				menuItem = new JMenuItem("Save");
 				menuItem.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
@@ -116,20 +124,23 @@ public class BlockWindow {
 								BuildingBlock block = blocks.getRootNode();
 								if(file.exists()){
 									if(file.canWrite()){
-										try {
-											Files.write(Paths.get(file.getPath()), blocks.nodeToBytes(block));
-											JOptionPane.showMessageDialog(blockFrame, "Saved");
-										} catch (IOException e1) {JOptionPane.showMessageDialog(blockFrame, "ERROR: Cannot save file!");}
-									}else{JOptionPane.showMessageDialog(blockFrame, "File is not rewritable");}
+										int dialogResult = JOptionPane.showConfirmDialog (null, "Overwrite the existing file?","Warning",JOptionPane.YES_NO_OPTION);
+											if(dialogResult == JOptionPane.YES_OPTION){
+											try {
+												Files.write(Paths.get(file.getPath()), blocks.nodeToBytes(block));
+												JOptionPane.showMessageDialog(null, "Saved");
+											} catch (IOException e1) {JOptionPane.showMessageDialog(null, "ERROR: Cannot save file!");}
+										}
+									}else{JOptionPane.showMessageDialog(null, "File is not rewritable");}
 								}
 								else{
 									try {
 										Files.write(Paths.get(file.getPath()), blocks.nodeToBytes(block));
-										JOptionPane.showMessageDialog(blockFrame, "Saved");
+										JOptionPane.showMessageDialog(null, "Signature Saved");
 									} catch (IOException e1) {JOptionPane.showMessageDialog(blockFrame, "ERROR: Cannot save file!");}
 								}
 							}
-						}else{JOptionPane.showMessageDialog(blockFrame, "Dir is not writable");}
+						}else{JOptionPane.showMessageDialog(null, "Dir is not writable");}
 					}
 				});
 				menu.add(menuItem);
@@ -281,8 +292,11 @@ public class BlockWindow {
 					public void actionPerformed(ActionEvent e){
 						if(blocks.getCurrentNode() != null){
 							if(blocks.getCurrentNode() != blocks.getRootNode()){
-								confirmDeleteBlockDialog();
-								Main.ImageWindow.update();
+								int dialogResult = JOptionPane.showConfirmDialog (null, "Delete the selected Block?","Warning",JOptionPane.YES_NO_OPTION);
+								if(dialogResult == JOptionPane.YES_OPTION){
+									blocks.removeCurrentNode();
+									Main.ImageWindow.update();
+								}
 							}
 						}
 					}
@@ -424,52 +438,6 @@ public class BlockWindow {
 
 		d.pack();
 
-		d.setLocationRelativeTo(blockFrame);
-		d.setVisible(true);
-		return d;
-	}
-
-	/**
-	 * Creates JDialog confirming to delete the currently selected Block
-	 * @return the JDialog window
-	 */
-	public JDialog confirmDeleteBlockDialog(){
-		final JDialog d = new JDialog(blockFrame, "Delete Block", true);
-
-		JPanel textPane = new JPanel();
-		textPane.setLayout(new BoxLayout(textPane, BoxLayout.PAGE_AXIS));
-		textPane.add(Box.createRigidArea(new Dimension(0,5)));
-		textPane.add(new JLabel("Are you sure you wish to Delete this Block?"));
-		textPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-
-		JButton deleteButton = new JButton("Delete");
-		deleteButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				d.dispose();
-				blocks.removeCurrentNode();
-			}
-		});
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				d.dispose();
-			}
-		});
-
-		JPanel buttonPane = new JPanel();
-		buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-		buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 3, 3));
-		buttonPane.add(Box.createHorizontalGlue());
-		buttonPane.add(deleteButton);
-		buttonPane.add(Box.createRigidArea(new Dimension(25, 0)));
-		buttonPane.add(cancelButton);
-		buttonPane.add(Box.createHorizontalGlue());
-
-		Container contentPane = d.getContentPane();
-		contentPane.add(textPane, BorderLayout.CENTER);
-		contentPane.add(buttonPane, BorderLayout.PAGE_END);
-
-		d.pack();
 		d.setLocationRelativeTo(blockFrame);
 		d.setVisible(true);
 		return d;

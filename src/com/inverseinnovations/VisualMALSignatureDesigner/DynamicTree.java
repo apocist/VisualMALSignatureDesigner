@@ -1,5 +1,6 @@
 package com.inverseinnovations.VisualMALSignatureDesigner;
 
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.ByteArrayInputStream;
@@ -17,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -67,6 +69,19 @@ public class DynamicTree extends JPanel {
 		tree = new JTree(treeModel);
 		tree.setEditable(true);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		//tree.setCellRenderer(renderer);//TODO
+		tree.setCellRenderer(new DefaultTreeCellRenderer() {
+			private static final long serialVersionUID = 1L;
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean isLeaf, int row, boolean focused) {
+                Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, isLeaf, row, focused);
+                if(value instanceof BuildingBlock){
+                	setIcon(((BuildingBlock)value).getIcon());
+                }
+                return c;
+            }
+        });
+
 		tree.setShowsRootHandles(true);
 
 		JScrollPane scrollPane = new JScrollPane(tree);
@@ -75,8 +90,7 @@ public class DynamicTree extends JPanel {
 
 	/** Remove all nodes except the root node. */
 	public void clear() {
-		rootNode.removeAllChildren();
-		treeModel.reload();
+		setRootNode(new InitSignature(Main));
 	}
 
 	public BuildingBlock getRootNode(){

@@ -17,6 +17,8 @@ import java.nio.file.Files;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
@@ -112,6 +114,10 @@ public class AddText extends BuildingBlock {
 	 */
 	public void setAngdeg(int angdeg) {
 		this.angdeg = angdeg;
+	}
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(System.getProperty("user.dir") + "/system/textIcon.png");
 	}
 	protected JPanel settingsText(){
 		JLabel textLab = new JLabel("Text:");

@@ -2,6 +2,8 @@ package com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock.Filter;
 
 import java.awt.image.BufferedImage;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
@@ -17,7 +19,10 @@ public class Filter extends BuildingBlock {
 	public boolean isFilter(){
 		return true;
 	}
-
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(System.getProperty("user.dir") + "/system/filterIcon.png");
+	}
 	@Override
 	public BufferedImage display(BufferedImage image){
 		image = generateImage(image);

@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -35,7 +36,10 @@ public class AddThumbnail extends AddImage {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(System.getProperty("user.dir") + "/system/thumbIcon.png");
+	}
 	@Override
 	protected JPanel settingsImage(final JDialog owner){
 

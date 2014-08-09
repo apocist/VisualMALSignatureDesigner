@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,6 +49,10 @@ public class AddEmptyImage extends AddImage {
 	 */
 	public void setSizeY(int sizeY) {
 		this.sizeY = sizeY;
+	}
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(System.getProperty("user.dir") + "/system/blankIcon.png");
 	}
 	@Override
 	protected JPanel settingsImage(final JDialog owner){

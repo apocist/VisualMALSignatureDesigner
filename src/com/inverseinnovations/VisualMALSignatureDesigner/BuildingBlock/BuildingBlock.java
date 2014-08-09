@@ -2,6 +2,8 @@ package com.inverseinnovations.VisualMALSignatureDesigner.BuildingBlock;
 
 import java.awt.Frame;
 import java.awt.image.BufferedImage;
+
+import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -82,6 +84,9 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 	public String toString(){
 		return getName();
 	}
+	public Icon getIcon() {
+		return null;
+	}
 	public JDialog settingsDialog(Frame owner){
 		return new JDialog(owner, "Null", true);
 	}
@@ -144,4 +149,5 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 	public String generateScript(){
 		return "";
 	}
+
 }

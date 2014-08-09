@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
@@ -43,6 +45,10 @@ public class AddBackground extends BuildingBlock {
 	 */
 	public void setRgb(String rgb) {
 		this.rgb = rgb;
+	}
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(System.getProperty("user.dir") + "/system/bgIcon.png");
 	}
 	@Override
 	public JDialog settingsDialog(Frame owner){

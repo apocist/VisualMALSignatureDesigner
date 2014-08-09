@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -56,7 +57,10 @@ public class AddImage extends BuildingBlock {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-
+	@Override
+	public Icon getIcon() {
+		return new ImageIcon(System.getProperty("user.dir") + "/system/imgIcon.png");
+	}
 	protected JPanel settingsImage(final JDialog owner){
 
 		//Image
