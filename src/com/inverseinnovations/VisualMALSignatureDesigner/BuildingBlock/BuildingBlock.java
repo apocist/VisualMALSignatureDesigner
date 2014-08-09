@@ -15,11 +15,10 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 	public final boolean ISPARENTABLE = true;
 	protected int x = 0;
 	protected int y = 0;
-	private BufferedImage image;
 	private String name;
 
 	//public Signature sig;
-	public final Main Main;
+	public transient Main Main;
 
 	public BuildingBlock(String name, Main Main){
 		setName(name);
@@ -27,7 +26,18 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 		this.Main = Main;
 		saveObject();
 	}
-	public boolean isFilter(){
+	public void reinit(Main Main){
+		this.Main = Main;
+		if(getChildCount() > 0){
+			for(int i = 0; i< getChildCount(); i++){
+				BuildingBlock block = (BuildingBlock) ((DefaultMutableTreeNode) getChildAt(i)).getUserObject();
+				if(block != null){
+					block.reinit(Main);
+				}
+			}
+		}
+	}
+ 	public boolean isFilter(){
 		return false;
 	}
 	/**
@@ -55,22 +65,10 @@ public class BuildingBlock extends DefaultMutableTreeNode{
 		this.y = y;
 	}
 	/**
-	 * @return the image
-	 */
-	public BufferedImage getImage() {
-		return image;
-	}
-	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
-	}
-	/**
-	 * @param image the image to set
-	 */
-	public void setImage(BufferedImage image) {
-		this.image = image;
 	}
 	public void saveObject(){
 		setUserObject(this);

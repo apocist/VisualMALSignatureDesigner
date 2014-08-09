@@ -2,6 +2,11 @@ package com.inverseinnovations.VisualMALSignatureDesigner;
 
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -190,24 +195,50 @@ public class DynamicTree extends JPanel {
 	}
 
 	private List<TreePath> getCurrExpandedPaths(TreePath currPath){
-	    List<TreePath> paths = new ArrayList<TreePath>();
-	    Enumeration<TreePath> expandEnum = tree.getExpandedDescendants(currPath);
-	    if (expandEnum == null)
-	        return null;
+		List<TreePath> paths = new ArrayList<TreePath>();
+		Enumeration<TreePath> expandEnum = tree.getExpandedDescendants(currPath);
+		if (expandEnum == null)
+			return null;
 
-	    while (expandEnum.hasMoreElements())
-	        paths.add(expandEnum.nextElement());
+		while (expandEnum.hasMoreElements())
+			paths.add(expandEnum.nextElement());
 
-	    return paths;
+		return paths;
 	}
 
 	private void reExpandPaths(List<TreePath> expPaths){
-	    if(expPaths == null)
-	        return;
-	    for(TreePath tp : expPaths)
-	        tree.expandPath(tp);
+		if(expPaths == null)
+			return;
+		for(TreePath tp : expPaths)
+			tree.expandPath(tp);
 	}
 
+	public BuildingBlock cloneNode(BuildingBlock node){
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		BuildingBlock theReturn = null;
+		ObjectOutputStream oos = null;
+		try {
+			oos = new ObjectOutputStream(bos);
+			oos.writeObject(node);
+			oos.flush();
+		}
+		catch(Exception e){System.out.println("ObjectOutputStream error");}
+		finally {
+			try {
+				oos.close();
+			} catch (IOException e) {}
+		}
+
+		byte[] bytes = bos.toByteArray();
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+			theReturn = (BuildingBlock)ois.readObject();
+			theReturn.reinit(Main);
+		}
+		catch (Exception e) {System.out.println("ObjectInputStream error");}
+		return theReturn;
+	}
 
 	class MyTreeModelListener implements TreeModelListener {
 		public void treeNodesChanged(TreeModelEvent e) {

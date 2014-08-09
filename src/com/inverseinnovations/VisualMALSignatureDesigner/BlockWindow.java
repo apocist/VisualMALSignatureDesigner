@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.PrintWriter;
 
 import javax.swing.BorderFactory;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -36,6 +38,7 @@ public class BlockWindow {
 
 	public DynamicTree blocks;
 	private JFrame blockFrame;
+	private BuildingBlock blockClipboard;
 
 	public BlockWindow(final Main Main){
 		this.Main = Main;
@@ -52,7 +55,8 @@ public class BlockWindow {
 				//Menu
 				JMenuBar menuBar = new JMenuBar();//Create the menu bar.
 
-				JMenu menu = new JMenu("Edit");//Build the first menu.
+				//File menu
+				JMenu menu = new JMenu("File");//Build the first menu.
 
 				//a group of JMenuItems
 				JMenuItem menuItem = new JMenuItem("Generate Script");
@@ -96,6 +100,54 @@ public class BlockWindow {
 
 				menuBar.add(menu);
 
+				//Edit menu
+				menu = new JMenu("Edit");//Build the first menu.
+
+				//a group of JMenuItems
+				menuItem = new JMenuItem("Cut");
+				menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,KeyEvent.ALT_DOWN_MASK));
+				menuItem.setMnemonic(KeyEvent.VK_X);
+				menuItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if(blocks.getCurrentNode() != null){
+							if(blocks.getCurrentNode() != blocks.getRootNode()){
+								blockClipboard = blocks.cloneNode(blocks.getCurrentNode());
+								blocks.removeCurrentNode();
+								Main.ImageWindow.update();
+							}else{blockClipboard = null;}
+						}else{blockClipboard = null;}
+					}
+				});
+				menu.add(menuItem);
+				menuItem = new JMenuItem("Copy");
+				menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,KeyEvent.ALT_DOWN_MASK));
+				menuItem.setMnemonic(KeyEvent.VK_C);
+				menuItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if(blocks.getCurrentNode() != null){
+							if(blocks.getCurrentNode() != blocks.getRootNode()){
+								blockClipboard = blocks.cloneNode(blocks.getCurrentNode());
+							}else{blockClipboard = null;}
+						}else{blockClipboard = null;}
+					}
+				});
+				menu.add(menuItem);
+				menuItem = new JMenuItem("Paste");
+				menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,KeyEvent.ALT_DOWN_MASK));
+				menuItem.setMnemonic(KeyEvent.VK_V);
+				menuItem.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if(blockClipboard != null){
+							blocks.addObject(blocks.cloneNode(blockClipboard));
+							Main.ImageWindow.update();
+						}
+					}
+				});
+				menu.add(menuItem);
+
+				menuBar.add(menu);
+
+				//divides item to sides
 				menuBar.add(Box.createGlue());//divides item to sides
 
 				JButton menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/addBut.png"));
