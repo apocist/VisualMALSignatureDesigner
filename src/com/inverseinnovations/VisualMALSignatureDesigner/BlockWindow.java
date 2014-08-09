@@ -221,7 +221,9 @@ public class BlockWindow {
 
 		//show filter selection panel
 		BuildingBlock[] filterTypes = {
+				new FilterBlurGaussian(Main),
 				new FilterBlurSimple(Main),
+				new FilterBlurVariable(Main),
 				new FilterChrome(Main),
 				new FilterEmboss(Main),
 				new FilterGlowInner(Main),
