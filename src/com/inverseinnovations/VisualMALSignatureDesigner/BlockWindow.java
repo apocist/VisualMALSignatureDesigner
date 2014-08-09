@@ -229,6 +229,7 @@ public class BlockWindow {
 				new FilterPerspective(Main),
 				new FilterResize(Main),
 				new FilterRotate(Main),
+				new FilterShadow(Main),
 				new FilterShadowSimple(Main),
 				new FilterSmear(Main),
 				new FilterSolarize(Main),
