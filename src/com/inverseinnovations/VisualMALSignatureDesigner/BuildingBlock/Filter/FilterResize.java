@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
@@ -24,35 +23,47 @@ import javax.swing.event.ChangeListener;
 
 import com.inverseinnovations.VisualMALSignatureDesigner.Main;
 
-public class FilterOpacity extends Filter {
+public class FilterResize extends Filter {
 	private static final long serialVersionUID = 1L;
-	private double amount = 100;
+	private int width = 100;
+	private int height = 100;
 
-	public FilterOpacity(Main Main){
-		super("Opacity", Main);
+	public FilterResize(Main Main){
+		super("Resize", Main);
 	}
 
 	/**
-	 * @return the angle
+	 * @return the width
 	 */
-	public double getAmount() {
-		return amount;
+	public int getWidth() {
+		return width;
 	}
-
 	/**
-	 * @param angle the angle to set
+	 * @return the height
 	 */
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public int getHeight() {
+		return height;
 	}
-
+	/**
+	 * @param width the width to set
+	 */
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	/**
+	 * @param height the height to set
+	 */
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
 	@Override
 	public JDialog settingsDialog(final Frame owner){
 		final String oldname = getName();
-		final double oldamount = getAmount();
+		final int oldwidth = getWidth();
+		final int oldheight = getHeight();
 
-		final JDialog d = new JDialog(owner, "Opacity Settings", true);
+		final JDialog d = new JDialog(owner, "Resize Settings", true);
 		Main.ImageWindow.update();
 
 		//Name
@@ -68,48 +79,47 @@ public class FilterOpacity extends Filter {
 		namePane.add(named);
 		namePane.add(Box.createHorizontalGlue());
 
-		//Amount
-		JLabel amountLab = new JLabel("Opacity:");
-		final JSpinner amountSpinner = new JSpinner();
-		amountSpinner.setModel(new SpinnerNumberModel((int)getAmount(),0,100,1));
-		//mySpinner.setEditor(new JSpinner.NumberEditor(mySpinner,"##.#"));
-		final JSlider amountSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) getAmount());amountSlider.setSize(100, 10);
-		amountSlider.addChangeListener(new ChangeListener(){
+		//width height
+		JLabel widthLab = new JLabel("Width: ");
+		final JSpinner widthSpinner = new JSpinner();
+		widthSpinner.setModel(new SpinnerNumberModel(getWidth(),1,9999,1));
+		widthSpinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				JSlider source = (JSlider)e.getSource();
-				int ang = source.getValue();
-				amountSpinner.setValue(ang);
-				//if (!source.getValueIsAdjusting()) {
-					setAmount((int) amountSpinner.getValue());
-					saveObject();
-					Main.ImageWindow.update();
-				//}
+				setWidth((int)widthSpinner.getValue());
+				saveObject();
+				Main.ImageWindow.update();
 			}
 		});
-		amountSpinner.addChangeListener(new ChangeListener(){
+		JLabel heightLab = new JLabel("Height: ");
+		final JSpinner heightSpinner = new JSpinner();
+		heightSpinner.setModel(new SpinnerNumberModel(getHeight(),1,9999,1));
+		heightSpinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				JSpinner source = (JSpinner)e.getSource();
-				int ang = (int) source.getValue();
-				amountSlider.setValue(ang);
+				setHeight((int)heightSpinner.getValue());
+				saveObject();
+				Main.ImageWindow.update();
 			}
 		});
 
-		JPanel amountPane = new JPanel();
-		amountPane.setLayout(new BoxLayout(amountPane, BoxLayout.LINE_AXIS));
-		amountPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
-		amountPane.add(Box.createHorizontalGlue());
-		amountPane.add(amountLab);
-		amountPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		amountPane.add(amountSlider);
-		amountPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		amountPane.add(amountSpinner);
-		amountPane.add(Box.createHorizontalGlue());
+		JPanel topPane = new JPanel();
+		topPane.setLayout(new BoxLayout(topPane, BoxLayout.LINE_AXIS));
+		topPane.setBorder(BorderFactory.createEmptyBorder(15, 25, 3, 25));
+		topPane.add(Box.createHorizontalGlue());
+		topPane.add(widthLab);
+		topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+		topPane.add(widthSpinner);
+		topPane.add(Box.createRigidArea(new Dimension(15, 0)));
+		topPane.add(heightLab);
+		topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+		topPane.add(heightSpinner);
+		topPane.add(Box.createHorizontalGlue());
+
 
 		//Content
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		contentPanel.add(Box.createVerticalGlue());
-		contentPanel.add(amountPane);
+		contentPanel.add(topPane);
 		contentPanel.add(Box.createVerticalGlue());
 
 		//OK / Cancel
@@ -118,6 +128,8 @@ public class FilterOpacity extends Filter {
 			public void actionPerformed(ActionEvent e){
 				//save and close
 				if(named.getText() != ""){setName(named.getText());}
+				setWidth((int)widthSpinner.getValue());
+				setHeight((int)heightSpinner.getValue());
 				saveObject();
 				Main.ImageWindow.update();
 				Main.BlockWindow.blocks.reload();
@@ -128,7 +140,8 @@ public class FilterOpacity extends Filter {
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				setName(oldname);
-				setAmount((int)oldamount);
+				setWidth(oldwidth);
+				setHeight(oldheight);
 				saveObject();
 				Main.ImageWindow.update();
 				d.dispose();
@@ -157,10 +170,10 @@ public class FilterOpacity extends Filter {
 
 	@Override
 	protected BufferedImage generateImage(BufferedImage image){
-		return Main.sig.filter.opacity(image, getAmount());
+		return Main.sig.filter.resize(image,getWidth(), getHeight());
 	}
 	@Override
 	public String generateScript(String filteronly){
-		return "filter.opacity("+filteronly+", "+getAmount()+")";
+		return "filter.resize("+filteronly+", "+getWidth()+", "+getHeight()+")";
 	}
 }

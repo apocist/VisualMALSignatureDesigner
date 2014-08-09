@@ -65,7 +65,7 @@ public class AddImage extends BuildingBlock {
 		imageLabel.setSize(100, 100);
 		imageLabel.setIcon(new ImageIcon(Main.sig.makeImage(100, 100)));
 		if(!getFilename().equals("")){
-			imageLabel.setIcon(new ImageIcon(Main.sig.filter.perspective(Main.sig.loadImage(getFilename()), 0, 0, 100, 0, 100, 100, 0, 100)));
+			imageLabel.setIcon(new ImageIcon(Main.sig.filter.resize(Main.sig.loadImage(getFilename()), 100, 100)));
 			//Main.sig.filter.perspective(Main.sig.loadImage(getFilename()), 0, 0, 200, 0, 200, 200, 0, 200);
 		}
 
