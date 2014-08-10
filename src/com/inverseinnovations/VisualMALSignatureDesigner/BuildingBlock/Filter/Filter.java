@@ -21,7 +21,7 @@ public class Filter extends BuildingBlock {
 	}
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(System.getProperty("user.dir") + "/system/filterIcon.png");
+		return new ImageIcon(Main.class.getResource("resources/filterIcon.png"));
 	}
 	@Override
 	public BufferedImage display(BufferedImage image){

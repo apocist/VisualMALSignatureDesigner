@@ -52,7 +52,7 @@ public class AddEmptyImage extends AddImage {
 	}
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(System.getProperty("user.dir") + "/system/blankIcon.png");
+		return new ImageIcon(Main.class.getResource("resources/blankIcon.png"));
 	}
 	@Override
 	protected JPanel settingsImage(final JDialog owner){

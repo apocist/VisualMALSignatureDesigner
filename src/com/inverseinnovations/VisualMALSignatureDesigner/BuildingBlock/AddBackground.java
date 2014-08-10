@@ -48,7 +48,7 @@ public class AddBackground extends BuildingBlock {
 	}
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(System.getProperty("user.dir") + "/system/bgIcon.png");
+		return new ImageIcon(Main.class.getResource("resources/bgIcon.png"));
 	}
 	@Override
 	public JDialog settingsDialog(Frame owner){

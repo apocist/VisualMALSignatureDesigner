@@ -2,14 +2,18 @@ package com.inverseinnovations.VisualMALSignatureDesigner;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.jnlp.*;
 
 import com.inverseinnovations.MALSignatureDesignerLite.*;
 //TODO update when Block ediited, block added, block deleted, block moved(?)
+
 public class Main {
 	public ImageWindow ImageWindow;
 	public BlockWindow BlockWindow;
 
-	public Signature sig = new Signature();
+	public Signature sig = new Signature(this.getClass());
 
     public static void main(String[] args){
         new Main();
@@ -18,6 +22,7 @@ public class Main {
     public Main(){
     	ImageWindow = new ImageWindow(this);
     	BlockWindow = new BlockWindow(this);
+    	prepareTempFolder();
     	//TODO make sure Sig is init before attempting to alter
     	//demoSig();
 
@@ -49,6 +54,29 @@ public class Main {
 
         ImageWindow.update();
     }
+
+    /**
+     * Makes sure the required folders exist for the program
+     */
+    private void prepareTempFolder(){
+    	File dir = new File(System.getProperty("user.dir") + "/images");
+    	System.out.println(dir.getPath());
+    	if(dir.mkdir()){
+    		System.out.println("folder created");
+    	}
+    	if(!dir.exists()){
+    		System.out.println("folder still doesn't exist tho");
+    	}
+
+    	dir = new File(System.getProperty("user.dir") + "/fonts");
+    	System.out.println(dir.getPath());
+    	if(dir.mkdir()){
+    		System.out.println("folder created");
+    	}
+    	if(!dir.exists()){
+    		System.out.println("folder still doesn't exist tho");
+    	}
+	}
 
     //Dunno where to put this yet
     /**

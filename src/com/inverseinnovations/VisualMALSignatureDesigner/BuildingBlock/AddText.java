@@ -117,7 +117,7 @@ public class AddText extends BuildingBlock {
 	}
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(System.getProperty("user.dir") + "/system/textIcon.png");
+		return new ImageIcon(Main.class.getResource("resources/textIcon.png"));
 	}
 	protected JPanel settingsText(){
 		JLabel textLab = new JLabel("Text:");

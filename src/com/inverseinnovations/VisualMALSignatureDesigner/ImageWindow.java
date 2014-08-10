@@ -49,7 +49,7 @@ public class ImageWindow {
 	 * and resizes the ImageFrame to fit
 	 */
 	public void update(){
-		Main.sig = new Signature();
+		Main.sig = new Signature(Main.getClass());
 		Main.BlockWindow.blocks.rootNode.display(null);
 
 		try {

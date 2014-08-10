@@ -59,7 +59,7 @@ public class AddImage extends BuildingBlock {
 	}
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(System.getProperty("user.dir") + "/system/imgIcon.png");
+		return new ImageIcon(Main.class.getResource("resources/imgIcon.png"));
 	}
 	protected JPanel settingsImage(final JDialog owner){
 

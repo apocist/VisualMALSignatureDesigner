@@ -234,7 +234,7 @@ public class BlockWindow {
 				//divides item to sides
 				menuBar.add(Box.createGlue());//divides item to sides
 
-				JButton menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/addBut.png"));
+				JButton menuBut = new JButton(new ImageIcon(Main.class.getResource("resources/addBut.png")));
 				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
 				menuBut.setToolTipText("Add a new Block/Filter");
 				menuBut.addActionListener(new ActionListener(){
@@ -249,7 +249,7 @@ public class BlockWindow {
 				});
 				menuBar.add(menuBut);
 
-				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/editBut.png"));
+				menuBut = new JButton(new ImageIcon(Main.class.getResource("resources/editBut.png")));
 				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
 				menuBut.setToolTipText("Edit the selected Block/Filter");
 				menuBut.addActionListener(new ActionListener(){
@@ -264,7 +264,7 @@ public class BlockWindow {
 				});
 				menuBar.add(menuBut);
 
-				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/upBut.png"));
+				menuBut = new JButton(new ImageIcon(Main.class.getResource("resources/upBut.png")));
 				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
 				menuBut.setToolTipText("Move the Block/Filter up");
 				menuBut.addActionListener(new ActionListener(){
@@ -274,7 +274,7 @@ public class BlockWindow {
 				});
 				menuBar.add(menuBut);
 
-				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/downBut.png"));
+				menuBut = new JButton(new ImageIcon(Main.class.getResource("resources/downBut.png")));
 				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
 				menuBut.setToolTipText("Move the Block/Filter down");
 				menuBut.addActionListener(new ActionListener(){
@@ -284,7 +284,7 @@ public class BlockWindow {
 				});
 				menuBar.add(menuBut);
 
-				menuBut = new JButton(new ImageIcon(System.getProperty("user.dir") + "/system/trashBut.png"));
+				menuBut = new JButton(new ImageIcon(Main.class.getResource("resources/trashBut.png")));
 				menuBut.setMargin(new Insets(0,0,0,0));menuBut.setBorder(null);menuBut.setBorderPainted(false);menuBut.setContentAreaFilled(false);menuBut.setPreferredSize(new Dimension(16,16));
 				menuBut.setToolTipText("Delete the selected Block/Filter");
 				menuBut.addActionListener(new ActionListener(){

@@ -38,7 +38,7 @@ public class AddThumbnail extends AddImage {
 	}
 	@Override
 	public Icon getIcon() {
-		return new ImageIcon(System.getProperty("user.dir") + "/system/thumbIcon.png");
+		return new ImageIcon(Main.class.getResource("resources/thumbIcon.png"));
 	}
 	@Override
 	protected JPanel settingsImage(final JDialog owner){
