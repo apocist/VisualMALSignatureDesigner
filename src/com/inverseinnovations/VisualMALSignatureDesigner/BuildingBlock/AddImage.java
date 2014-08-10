@@ -73,7 +73,7 @@ public class AddImage extends BuildingBlock {
 			//Main.sig.filter.perspective(Main.sig.loadImage(getFilename()), 0, 0, 200, 0, 200, 200, 0, 200);
 		}
 
-		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "/images");
+		final JFileChooser fc = new JFileChooser(System.getProperty("user.dir") + "/images/");
 		FileFilter filter = new FileNameExtensionFilter("Image file", new String[] {"jpg", "jpeg","gif","png","bmp"});
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
@@ -81,14 +81,14 @@ public class AddImage extends BuildingBlock {
 		final JButton imageBut = new JButton("...");
 		imageBut.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				File dir = new File(System.getProperty("user.dir") + "/images");
+				File dir = new File(Main.WORKSPACE + "/images/");
 				if(dir.isDirectory() && dir.canRead()){
 					fc.setCurrentDirectory(dir);
 					int returnVal = fc.showOpenDialog(owner);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						File file = fc.getSelectedFile();
 						if(file.isFile()){
-							if(file.getParentFile().compareTo(dir) == 0){//is in the Fonts folder already
+							if(file.getParentFile().compareTo(dir) == 0){//is in the images folder already
 								//TODO add BufferedImage to box
 								setFilename(file.getName());
 								saveObject();
@@ -98,7 +98,7 @@ public class AddImage extends BuildingBlock {
 							else{//not in images folder
 								System.out.println("not in folder, copying...");
 								try {
-									Files.copy(file.toPath(), dir.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+									Files.copy(file.toPath(), new File(Main.WORKSPACE + "/images/"+file.getName()).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 									//TODO add BufferedImage to box
 									setFilename(file.getName());
 									saveObject();

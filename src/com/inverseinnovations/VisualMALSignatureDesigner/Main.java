@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import javax.jnlp.*;
-
 import com.inverseinnovations.MALSignatureDesignerLite.*;
 //TODO update when Block ediited, block added, block deleted, block moved(?)
 
 public class Main {
 	public ImageWindow ImageWindow;
 	public BlockWindow BlockWindow;
+	public String WORKSPACE = System.getProperty("user.dir");
 
 	public Signature sig = new Signature(this.getClass());
 
@@ -23,7 +22,6 @@ public class Main {
     	ImageWindow = new ImageWindow(this);
     	BlockWindow = new BlockWindow(this);
     	prepareTempFolder();
-    	//TODO make sure Sig is init before attempting to alter
     	//demoSig();
 
     	//just testing stuff here
@@ -59,21 +57,21 @@ public class Main {
      * Makes sure the required folders exist for the program
      */
     private void prepareTempFolder(){
-    	File dir = new File(System.getProperty("user.dir") + "/images");
+    	File dir = new File(System.getProperty("user.dir") + "/images/");
     	System.out.println(dir.getPath());
-    	if(dir.mkdir()){
+    	if(dir.mkdirs()){
     		System.out.println("folder created");
     	}
-    	if(!dir.exists()){
+    	if(!dir.isDirectory()){
     		System.out.println("folder still doesn't exist tho");
     	}
 
-    	dir = new File(System.getProperty("user.dir") + "/fonts");
+    	dir = new File(System.getProperty("user.dir") + "/fonts/");
     	System.out.println(dir.getPath());
-    	if(dir.mkdir()){
+    	if(dir.mkdirs()){
     		System.out.println("folder created");
     	}
-    	if(!dir.exists()){
+    	if(!dir.isDirectory()){
     		System.out.println("folder still doesn't exist tho");
     	}
 	}

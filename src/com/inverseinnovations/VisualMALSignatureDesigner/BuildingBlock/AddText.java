@@ -218,7 +218,7 @@ public class AddText extends BuildingBlock {
 	    });
 		fontBut.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				File dir = new File(System.getProperty("user.dir") + "/fonts");
+				File dir = new File(Main.WORKSPACE + "/fonts");
 				if(dir.isDirectory() && dir.canRead()){
 					fc.setCurrentDirectory(dir);
 					int returnVal = fc.showOpenDialog(d);
@@ -242,7 +242,7 @@ public class AddText extends BuildingBlock {
 									//copy to fonts folder //TODO check
 									System.out.println("not in folder, copying...");
 									try {
-										Files.copy(file.toPath(), dir.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+										Files.copy(file.toPath(), new File(Main.WORKSPACE + "/fonts/"+file.getName()).toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 										//fontField.setText(file.getName());
 										fontBox.addItem(file.getName());
 										fontBox.setSelectedItem(file.getName());
